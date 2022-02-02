@@ -1,0 +1,251 @@
+PId,Age,Gender,Year,MajorField,GPA,UsedPhysical,UsedOnline,HoursPhysical,HoursOnline,HoursSocial,Device,AccessPref,ResourceSeek,HowOftenFind,SatisfiedPhysical,SatisfiedOnline
+1,21,woman,1,computing,4,1,1,13,17,4,desktop,in-person,conference proceedings,5,3,5
+2,22,man,1,computing,2.7,1,1,2,9,10,desktop,no preference,multimedia,3,4,1
+3,17,man,4,business,3.2,1,1,6,11,14,smartphone,online,conference proceedings,5,4,5
+4,19,man,5,humanities,3.5,1,1,5,28,16,other,in-person,journals,6,3,5
+5,20,man,2,computing,3.8,1,0,10,0,9,smartphone,online,journals,4,3,3
+6,20,man,4,humanities,3.4,1,1,10,8,6,tablet,no preference,conference proceedings,3,3,3
+7,19,woman,5,other,2.7,1,1,4,9,8,desktop,in-person,books,5,5,4
+8,22,man,1,computing,4,1,1,1,12,0,desktop,in-person,multimedia,5,7,4
+9,19,man,3,social science,1.7,1,0,10,0,6,desktop,in-person,conference proceedings,3,4,2
+10,19,woman,1,business,4,1,1,8,7,5,desktop,online,journals,7,7,5
+11,17,man,5,humanities,1,1,1,12,16,16,laptop,online,books,7,3,4
+12,18,man,2,humanities,1.8,1,1,9,10,12,tablet,in-person,journals,6,7,6
+13,18,woman,4,natural science,3.2,1,1,13,15,8,tablet,no preference,multimedia,4,5,5
+14,18,man,2,humanities,4,1,0,9,0,6,desktop,online,books,7,5,4
+15,23,woman,3,business,1.6,1,1,11,15,24,desktop,online,conference proceedings,4,7,2
+16,22,man,4,humanities,4,1,1,5,8,19,desktop,online,conference proceedings,3,5,4
+17,18,man,2,business,2.8,1,1,7,8,17,desktop,online,conference proceedings,2,5,4
+18,23,woman,3,social science,3,1,1,7,1,1,desktop,no preference,conference proceedings,4,4,3
+19,20,man,4,natural science,2.2,0,1,0,14,4,desktop,in-person,books,5,3,7
+20,23,woman,3,social science,2.6,1,1,8,17,5,tablet,online,journals,5,6,5
+21,22,man,3,other,2.9,0,1,0,11,9,tablet,online,conference proceedings,5,2,5
+22,21,non-binary,1,business,1.8,1,1,7,6,1,laptop,online,journals,4,3,1
+23,20,man,2,humanities,3.1,1,1,2,4,4,laptop,in-person,books,4,3,3
+24,18,woman,1,social science,3.8,1,1,9,13,22,desktop,online,multimedia,2,6,4
+25,18,man,4,engineering,2.8,1,1,6,12,4,laptop,no preference,conference proceedings,5,5,5
+26,18,man,5,business,1.3,1,1,1,1,6,laptop,online,conference proceedings,4,2,4
+27,23,non-binary,3,humanities,3.8,1,1,6,8,12,desktop,online,books,6,4,3
+28,18,woman,3,computing,2.4,1,1,7,2,14,desktop,online,conference proceedings,4,5,4
+29,19,man,4,business,3,1,1,5,4,14,laptop,in-person,journals,5,4,4
+30,19,woman,2,natural science,3.6,1,1,8,9,2,tablet,online,multimedia,5,5,4
+31,18,woman,3,business,3.2,1,1,5,7,9,tablet,online,journals,6,3,4
+32,20,man,1,social science,2,0,1,0,8,14,desktop,online,books,5,7,3
+33,19,non-binary,1,engineering,3.9,1,1,15,7,10,smartphone,online,multimedia,6,5,2
+34,21,woman,1,social science,2.6,0,1,0,15,19,desktop,online,books,4,4,3
+35,18,woman,5,engineering,3.5,1,1,11,12,4,desktop,in-person,conference proceedings,5,6,4
+36,21,man,4,natural science,1.6,1,1,9,11,6,smartphone,in-person,books,6,6,6
+37,19,woman,4,computing,3,1,1,11,8,6,desktop,online,multimedia,3,4,4
+38,21,man,3,social science,3.7,1,1,15,9,17,desktop,online,books,6,3,3
+39,21,man,2,natural science,2.6,1,1,6,9,1,smartphone,online,journals,5,3,4
+40,21,woman,1,humanities,2.1,1,1,5,13,18,laptop,online,books,6,5,5
+41,23,man,4,business,3.4,1,1,10,4,0,desktop,online,journals,7,6,3
+42,18,man,1,engineering,3.1,0,0,0,0,0,desktop,online,conference proceedings,4,3,3
+43,20,woman,3,business,1,1,1,13,9,23,desktop,in-person,books,7,4,4
+44,19,woman,3,humanities,3,1,1,5,12,39,desktop,online,journals,5,2,5
+45,17,prefer to self-describe,3,natural science,4,1,1,8,15,8,laptop,online,journals,5,5,6
+46,18,man,1,natural science,2.5,1,1,10,16,1,desktop,in-person,books,6,7,7
+47,18,woman,4,engineering,3.5,1,1,14,8,0,desktop,online,journals,5,4,4
+48,20,woman,4,computing,2,1,1,4,11,2,desktop,online,conference proceedings,3,4,4
+49,18,man,1,business,4,1,1,8,9,19,desktop,online,journals,5,7,4
+50,22,woman,3,social science,4,1,1,7,2,10,desktop,online,books,5,2,4
+51,23,woman,2,business,3.4,1,1,11,12,3,desktop,in-person,books,5,5,7
+52,17,man,4,social science,4,1,1,10,17,1,desktop,online,conference proceedings,4,2,3
+53,22,woman,2,social science,3.1,1,1,7,14,12,desktop,online,journals,3,1,2
+54,22,man,1,computing,4,1,1,2,6,11,laptop,online,journals,5,4,5
+55,18,woman,5,business,3.8,0,1,0,10,20,desktop,online,journals,5,5,4
+56,18,woman,3,other,4,1,1,18,1,13,other,in-person,journals,5,7,3
+57,19,man,4,computing,2.1,1,1,11,9,13,tablet,online,conference proceedings,5,1,2
+58,22,man,4,humanities,2.7,1,1,15,8,18,laptop,online,journals,6,5,3
+59,23,non-binary,3,social science,2.3,1,1,14,14,20,desktop,in-person,multimedia,4,5,4
+60,21,non-binary,4,natural science,2.7,1,1,8,12,3,desktop,online,multimedia,5,7,5
+61,19,man,2,humanities,4,1,1,11,21,2,laptop,in-person,books,6,4,7
+62,19,man,4,computing,2.9,1,1,7,13,2,laptop,in-person,conference proceedings,5,6,4
+63,20,man,2,computing,3.6,0,1,0,9,13,laptop,online,books,6,3,3
+64,22,man,5,engineering,2.9,1,1,6,2,16,laptop,online,journals,3,2,3
+65,18,woman,3,engineering,3.8,1,1,8,13,4,desktop,no preference,books,6,4,4
+66,19,woman,5,humanities,3,1,1,11,19,0,laptop,in-person,books,6,7,6
+67,21,woman,3,social science,3.3,1,1,7,13,12,desktop,online,conference proceedings,5,3,3
+68,19,woman,4,humanities,3.8,1,1,9,18,14,desktop,online,books,6,5,7
+69,20,man,3,natural science,3.9,1,1,8,14,4,smartphone,online,multimedia,5,6,5
+70,20,non-binary,5,computing,2.9,1,1,14,9,17,desktop,online,conference proceedings,3,4,4
+71,18,non-binary,5,natural science,2.4,1,1,2,1,2,tablet,online,other,2,2,3
+72,20,man,2,business,3,1,1,18,8,14,desktop,online,journals,5,6,4
+73,18,man,4,computing,1.2,1,1,3,6,6,desktop,online,journals,2,2,2
+74,19,man,1,business,4,1,1,13,16,0,desktop,online,conference proceedings,6,5,7
+75,19,woman,4,computing,3.4,1,1,5,18,4,other,online,multimedia,3,3,4
+76,21,woman,2,social science,3.3,1,1,5,6,13,laptop,online,journals,4,5,3
+77,19,man,4,social science,4,1,1,9,7,7,tablet,online,books,7,6,5
+78,17,man,1,other,3,1,1,15,18,11,laptop,in-person,conference proceedings,6,5,4
+79,20,man,5,business,3.9,1,1,6,27,0,tablet,in-person,books,7,5,5
+80,21,woman,1,social science,3.6,1,1,2,12,17,smartphone,in-person,journals,6,4,6
+81,21,woman,4,business,2.5,1,1,9,14,13,tablet,online,journals,5,5,7
+82,19,man,3,other,3.4,1,1,6,1,15,desktop,online,journals,5,4,4
+83,18,man,1,other,3,1,1,8,15,11,laptop,in-person,journals,4,3,4
+84,19,man,4,social science,1.3,1,1,6,1,14,laptop,online,journals,3,3,4
+85,19,woman,1,business,3.1,1,1,8,10,21,desktop,online,conference proceedings,4,5,2
+86,22,man,3,business,4,1,1,11,13,16,smartphone,no preference,books,6,7,2
+87,18,man,4,computing,3,1,1,4,3,2,tablet,online,conference proceedings,5,3,3
+88,20,man,1,business,3.5,1,1,2,11,16,other,online,journals,4,5,4
+89,17,woman,5,engineering,3,1,0,12,0,16,laptop,online,journals,4,6,3
+90,18,woman,1,humanities,4,1,1,12,3,0,smartphone,in-person,books,7,4,3
+91,20,man,3,humanities,2.8,1,1,11,14,18,desktop,online,conference proceedings,4,5,3
+92,22,woman,1,computing,3.8,1,1,7,10,12,laptop,in-person,conference proceedings,4,2,5
+93,21,man,1,humanities,4,1,1,17,14,22,other,in-person,multimedia,3,6,4
+94,18,man,1,natural science,1.5,1,1,12,1,8,laptop,in-person,books,6,6,4
+95,19,man,4,humanities,4,1,1,13,3,0,desktop,in-person,conference proceedings,5,7,2
+96,19,woman,3,humanities,3,1,1,6,7,18,desktop,in-person,journals,3,4,5
+97,21,man,3,engineering,3.1,1,1,3,12,4,laptop,in-person,multimedia,4,4,3
+98,18,woman,4,humanities,3.3,1,1,8,1,22,desktop,online,books,5,5,3
+99,22,woman,2,natural science,3.5,1,1,4,7,6,desktop,online,journals,6,2,2
+100,22,man,2,humanities,1.2,1,1,4,6,17,laptop,in-person,books,6,2,3
+101,22,prefer to self-describe,1,business,2.1,1,1,8,7,19,desktop,online,journals,4,6,2
+102,20,woman,1,business,3.3,1,1,11,10,7,tablet,online,conference proceedings,6,6,4
+103,20,man,4,natural science,2,1,1,4,13,4,desktop,online,journals,5,7,4
+104,18,woman,4,business,3.2,1,1,13,9,17,desktop,in-person,conference proceedings,3,2,3
+105,18,woman,2,computing,1.6,1,1,1,18,14,desktop,online,journals,5,5,6
+106,18,man,4,computing,2.4,1,1,7,22,10,laptop,in-person,conference proceedings,5,1,5
+107,21,woman,2,computing,2.2,0,1,0,1,2,tablet,no preference,conference proceedings,4,1,3
+108,20,man,2,other,2.3,1,1,6,2,8,desktop,online,conference proceedings,3,2,4
+109,19,woman,1,natural science,2.3,1,1,5,9,5,desktop,no preference,journals,5,3,3
+110,17,woman,1,business,2.6,1,1,7,2,4,laptop,online,journals,4,3,3
+111,18,woman,1,humanities,4,1,1,1,9,16,desktop,online,books,5,6,4
+112,22,woman,4,business,3.7,1,1,4,12,22,desktop,online,books,4,3,4
+113,22,man,4,business,1.6,1,1,9,8,13,laptop,in-person,conference proceedings,5,5,2
+114,23,man,1,natural science,4,1,1,9,8,2,laptop,online,conference proceedings,4,5,3
+115,20,man,4,other,2,0,1,0,12,8,desktop,in-person,conference proceedings,5,1,5
+116,20,man,3,social science,2.7,1,1,11,1,9,tablet,online,multimedia,4,6,4
+117,19,woman,4,humanities,2.2,1,1,14,15,12,laptop,in-person,other,3,3,2
+118,21,woman,4,social science,4,1,1,6,8,0,tablet,in-person,journals,4,4,3
+119,19,woman,4,business,4,1,0,8,0,8,desktop,in-person,books,7,5,4
+120,22,prefer to self-describe,2,humanities,4,1,1,2,18,7,tablet,in-person,books,5,3,6
+121,19,woman,1,humanities,1.6,1,1,9,2,16,desktop,online,books,6,2,5
+122,21,woman,4,business,2.4,1,1,7,15,14,tablet,online,books,7,3,5
+123,23,non-binary,5,social science,4,1,1,11,6,16,desktop,online,books,6,7,4
+124,18,man,1,social science,4,1,1,15,7,6,desktop,no preference,conference proceedings,4,6,3
+125,20,man,3,business,2.5,0,1,0,4,10,other,in-person,journals,4,3,2
+126,19,woman,2,computing,1.2,1,1,2,20,6,desktop,in-person,conference proceedings,4,4,5
+127,19,woman,5,social science,2.8,1,0,8,0,2,tablet,in-person,other,4,7,3
+128,20,man,3,humanities,3.5,1,1,8,12,9,smartphone,online,books,7,5,7
+129,18,man,4,business,1.9,1,1,10,15,27,desktop,no preference,journals,5,7,6
+130,21,woman,4,other,4,1,1,11,7,9,laptop,online,conference proceedings,5,6,3
+131,21,woman,3,humanities,3.3,1,1,14,9,15,desktop,online,books,7,7,5
+132,18,non-binary,5,engineering,1.9,1,1,2,11,7,desktop,online,journals,5,4,5
+133,21,man,1,business,1.6,1,0,14,0,7,desktop,online,journals,5,6,4
+134,17,woman,5,natural science,2.9,1,1,8,13,8,tablet,online,conference proceedings,5,7,5
+135,19,woman,4,humanities,4,1,1,6,7,4,desktop,online,books,6,1,4
+136,20,man,5,computing,2,1,1,6,10,5,tablet,in-person,multimedia,5,3,5
+137,21,woman,4,business,4,0,0,0,0,13,desktop,online,books,5,4,3
+138,21,man,1,computing,3.1,1,1,7,3,8,tablet,online,conference proceedings,4,5,1
+139,22,woman,3,humanities,2.4,1,1,7,5,18,laptop,online,journals,5,4,5
+140,20,man,2,business,1.4,0,1,0,15,11,laptop,online,books,7,5,4
+141,19,woman,2,humanities,2.4,1,1,5,24,11,laptop,online,journals,5,6,5
+142,23,non-binary,5,business,4,1,1,10,10,4,desktop,in-person,journals,4,1,3
+143,22,non-binary,5,business,2.1,1,1,6,16,26,other,in-person,journals,4,5,2
+144,19,prefer not to disclose,2,humanities,3.2,1,1,5,10,10,smartphone,online,books,7,3,6
+145,19,man,3,humanities,3.9,1,1,14,9,17,tablet,online,books,5,6,5
+146,23,woman,4,social science,3.8,1,1,10,8,3,tablet,online,journals,4,2,4
+147,20,prefer to self-describe,4,humanities,3.2,1,1,8,10,15,laptop,online,journals,6,7,5
+148,22,non-binary,1,other,2.6,1,1,12,18,13,tablet,in-person,conference proceedings,5,7,6
+149,19,man,1,business,3.9,1,1,4,3,7,tablet,online,books,3,4,3
+150,19,woman,3,social science,2.4,1,1,11,4,17,tablet,online,journals,5,6,4
+151,22,woman,1,humanities,2.6,1,1,17,3,13,desktop,online,books,6,6,4
+152,22,man,2,humanities,4,1,1,6,13,24,other,in-person,books,6,5,5
+153,17,prefer to self-describe,1,humanities,2.6,1,1,4,1,4,desktop,online,journals,5,3,5
+154,21,man,1,computing,2.8,1,1,11,1,15,desktop,in-person,books,7,6,4
+155,23,man,3,social science,3.7,1,1,5,20,2,desktop,online,books,5,4,7
+156,21,woman,2,business,4,1,1,10,17,14,laptop,in-person,conference proceedings,4,5,2
+157,19,woman,5,business,2.6,1,1,8,18,14,desktop,online,journals,4,2,3
+158,22,woman,3,natural science,2.8,1,1,16,18,7,desktop,online,journals,7,7,5
+159,17,non-binary,3,humanities,3.5,1,1,10,15,15,laptop,online,books,6,6,7
+160,21,man,2,humanities,4,1,1,8,21,1,tablet,online,books,7,6,6
+161,22,woman,1,natural science,3.3,1,0,14,0,5,tablet,no preference,conference proceedings,7,5,4
+162,23,man,4,humanities,4,0,1,0,16,3,desktop,in-person,books,6,3,3
+163,18,woman,3,social science,4,1,1,9,1,13,laptop,online,books,5,7,3
+164,23,man,3,humanities,1.7,1,1,4,5,24,desktop,no preference,books,4,7,3
+165,21,man,1,humanities,4,1,1,8,12,9,other,online,books,6,5,6
+166,20,woman,2,computing,4,1,1,15,4,4,smartphone,in-person,other,4,4,4
+167,22,woman,5,humanities,4,1,1,7,1,15,desktop,in-person,books,4,5,4
+168,17,man,2,other,3,1,1,12,20,7,desktop,online,journals,4,2,5
+169,21,man,3,business,3.3,1,1,11,12,16,desktop,online,journals,4,4,4
+170,17,woman,2,humanities,3.9,0,1,0,4,29,laptop,online,books,5,3,3
+171,20,woman,2,humanities,4,1,1,10,13,0,other,online,books,4,3,3
+172,18,non-binary,1,engineering,2.7,1,1,6,12,4,tablet,online,conference proceedings,4,5,4
+173,17,prefer not to disclose,1,humanities,3.5,1,1,1,12,13,laptop,online,conference proceedings,4,3,2
+174,20,man,3,humanities,2.8,1,1,10,8,26,laptop,online,books,6,5,5
+175,17,man,2,business,3.1,0,0,0,0,11,laptop,online,books,4,4,5
+176,21,woman,2,business,3.6,1,1,14,12,0,desktop,in-person,journals,5,5,7
+177,22,man,5,computing,1.6,1,1,6,8,6,desktop,online,journals,6,6,3
+178,19,man,1,computing,2.1,1,1,8,4,7,desktop,online,books,6,4,3
+179,17,woman,3,computing,2.1,1,1,7,14,11,desktop,online,conference proceedings,4,1,5
+180,19,woman,3,business,2,1,1,11,8,18,laptop,online,conference proceedings,3,4,3
+181,18,woman,4,business,4,1,0,8,0,12,smartphone,online,journals,5,3,4
+182,22,woman,1,social science,1.8,1,1,4,1,6,laptop,online,journals,4,5,4
+183,21,man,2,humanities,3.7,1,1,10,13,9,other,online,books,7,4,7
+184,19,man,5,social science,2.7,1,1,10,15,17,other,online,journals,6,5,6
+185,18,woman,5,humanities,3.5,1,1,6,7,0,desktop,online,books,5,3,3
+186,22,woman,4,social science,2.7,1,1,11,13,16,laptop,online,journals,4,4,4
+187,21,man,3,humanities,3.8,1,1,14,1,6,laptop,online,books,6,5,3
+188,20,woman,4,social science,4,1,1,4,15,6,smartphone,online,books,6,3,6
+189,19,prefer not to disclose,5,engineering,3.1,1,1,13,26,6,smartphone,in-person,conference proceedings,3,3,2
+190,19,man,2,humanities,2.9,1,1,6,9,27,desktop,online,books,6,3,4
+191,20,man,3,social science,4,1,1,7,9,11,desktop,online,multimedia,4,3,3
+192,19,man,4,humanities,2.1,1,1,8,7,19,smartphone,in-person,books,6,4,3
+193,19,prefer to self-describe,5,computing,2.8,1,1,9,6,6,laptop,in-person,conference proceedings,5,6,5
+194,17,woman,4,natural science,4,0,1,0,5,9,desktop,online,multimedia,1,5,5
+195,18,man,5,engineering,2.5,1,0,11,0,14,smartphone,online,journals,5,7,3
+196,22,woman,4,social science,4,1,1,19,7,7,desktop,online,conference proceedings,4,2,4
+197,17,non-binary,5,social science,3.2,1,1,11,11,10,desktop,online,journals,4,3,3
+198,22,woman,2,natural science,2,1,1,1,12,9,desktop,online,books,4,5,2
+199,20,non-binary,3,humanities,2.8,1,1,4,9,0,smartphone,online,journals,3,2,3
+200,21,man,5,humanities,3.2,0,1,0,1,9,other,in-person,books,6,4,3
+201,21,non-binary,4,engineering,3.6,1,1,6,14,0,desktop,online,books,7,5,4
+202,19,woman,3,computing,3.5,1,1,16,8,14,tablet,in-person,multimedia,3,7,2
+203,21,man,2,business,2.8,1,1,5,15,14,desktop,in-person,journals,6,5,5
+204,19,woman,1,humanities,4,1,0,14,0,6,desktop,in-person,books,5,7,4
+205,18,man,5,social science,3.8,1,1,1,10,17,desktop,online,conference proceedings,3,5,2
+206,18,prefer to self-describe,4,other,2.7,1,1,8,27,11,desktop,in-person,journals,6,7,6
+207,18,man,5,business,3,1,1,7,14,11,laptop,in-person,conference proceedings,4,2,5
+208,19,woman,1,computing,3.9,1,0,4,0,13,other,online,journals,3,4,5
+209,20,man,2,humanities,2.8,1,1,11,4,7,smartphone,online,books,5,6,4
+210,22,prefer to self-describe,2,humanities,4,1,1,10,16,10,smartphone,online,journals,4,3,3
+211,22,man,5,business,3.6,0,1,0,4,9,smartphone,online,journals,5,2,3
+212,17,woman,3,humanities,4,1,1,4,13,11,laptop,online,books,5,4,6
+213,21,woman,5,social science,3.8,1,1,9,7,13,laptop,online,books,5,6,2
+214,21,woman,3,humanities,3.2,1,1,14,1,19,desktop,online,books,6,6,3
+215,17,woman,2,natural science,4,1,1,12,11,3,tablet,online,conference proceedings,5,5,7
+216,21,woman,3,computing,2.8,1,1,9,22,7,other,in-person,conference proceedings,4,4,5
+217,18,woman,5,computing,0.8,1,1,7,1,9,tablet,online,conference proceedings,3,3,3
+218,21,woman,5,business,1.1,1,1,3,14,29,desktop,online,journals,4,6,5
+219,17,woman,4,business,4,1,1,10,2,14,desktop,in-person,journals,5,5,5
+220,20,woman,2,other,4,0,1,0,19,10,tablet,online,multimedia,4,1,4
+221,21,man,3,business,3.3,1,1,6,17,17,tablet,online,books,6,1,3
+222,23,man,5,natural science,3.9,1,1,11,4,5,laptop,in-person,journals,5,3,2
+223,23,woman,1,social science,3.7,1,1,10,15,16,laptop,online,journals,5,5,6
+224,17,man,3,social science,3.1,1,1,16,4,12,desktop,online,journals,4,4,3
+225,18,woman,1,business,4,1,1,6,16,0,desktop,online,conference proceedings,5,3,7
+226,23,man,4,business,3.2,1,1,10,20,15,other,online,journals,6,6,5
+227,21,man,4,engineering,4,1,1,9,6,0,desktop,online,books,6,5,5
+228,17,man,3,other,3,1,1,7,7,16,laptop,online,books,5,1,1
+229,17,woman,5,humanities,4,1,1,10,6,10,desktop,online,books,4,2,4
+230,20,woman,3,social science,4,1,1,9,10,9,smartphone,online,multimedia,6,4,5
+231,22,woman,3,business,1.4,1,1,7,4,18,desktop,in-person,books,5,4,4
+232,21,woman,1,engineering,3.4,1,1,5,1,0,other,online,multimedia,4,2,7
+233,20,prefer not to disclose,2,business,2,1,1,5,3,17,desktop,online,journals,5,4,5
+234,22,man,2,other,2.7,1,1,6,12,9,other,online,books,6,1,6
+235,23,man,4,natural science,4,1,1,9,8,13,desktop,no preference,journals,5,6,3
+236,19,prefer not to disclose,5,natural science,3.2,0,1,0,12,14,other,online,multimedia,4,5,4
+237,18,woman,5,humanities,2.7,1,0,8,0,5,desktop,online,books,7,5,3
+238,18,prefer to self-describe,1,social science,3.9,1,1,9,5,3,desktop,online,conference proceedings,4,3,2
+239,21,non-binary,2,computing,1.7,1,1,7,1,5,laptop,online,conference proceedings,3,3,4
+240,18,man,3,computing,0.7,1,1,3,1,9,desktop,in-person,conference proceedings,4,1,4
+241,19,woman,1,computing,4,1,1,6,18,8,tablet,in-person,journals,7,1,5
+242,17,woman,3,business,3.2,1,1,7,17,21,tablet,online,books,7,2,4
+243,17,non-binary,5,social science,3.3,1,1,17,1,7,tablet,online,books,7,5,4
+244,21,man,2,natural science,2.2,1,1,4,9,18,desktop,no preference,multimedia,1,4,3
+245,20,man,3,engineering,1.4,1,1,6,1,9,laptop,in-person,conference proceedings,2,5,4
+246,23,man,5,business,1.1,1,1,1,1,16,desktop,online,books,4,1,4
+247,21,woman,1,computing,3.9,1,1,5,7,5,desktop,online,conference proceedings,3,6,4
+248,22,woman,1,humanities,3.2,1,1,6,16,15,desktop,online,books,6,5,4
+249,19,woman,3,business,4,1,1,8,15,9,desktop,online,conference proceedings,5,7,5
+250,21,man,1,humanities,3.4,1,1,10,1,11,desktop,online,books,5,7,4
