@@ -11,8 +11,6 @@ library(RVAideMemoire)
 library(coin)
 library(MASS)
 
-# TODO: Figure out how to better distribute axis labels for barplots
-
 # Set working dir
 setwd("//home/maxfield/active/personal/insc-571/assignments/a02/")
 df <- read.csv("survey.csv")
@@ -59,9 +57,6 @@ plot(~Gender, data = df)
 print(table(df$Gender))
 # There were 109 respondents that self-identified as men, there were 108 respondents that self identified as women, there were 19 respondents that self-identified as non-binary, 5 respondents preferred not to disclose their gender identity, and 9 respondents preferred to self-describe their gender identity.
 
-# man = df[df$Gender == "man", ]
-# woman = df[df$Gender == "woman", ]
-# nb = df[df$Gender == "non-binary", ]
 
 
 ####
@@ -116,15 +111,33 @@ print(
 
 #     7c. Of respondents by major field of study? Feel free to show a table. Also, make a plot to show
 #         this.
+# Plot
+plot(GPA ~ MajorField, data = df)
+# Table
+print(
+    ddply(
+        df,
+        ~MajorField,
+        summarise,
+        GPA.mean = round(mean(GPA), 2),
+        GPA.sd = round(sd(GPA), 2)
+    )
+)
+#        MajorField GPA.mean GPA.sd
+# 1        business     2.93   0.94
+# 2       computing     2.72   0.99
+# 3     engineering     3.07   0.69
+# 4      humanities     3.24   0.78
+# 5 natural science     2.97   0.82
+# 6           other     3.02   0.60
+# 7  social science     3.27   0.76
 
 
-
-
-####
+#### TODO: Verify
 # Question 8. Is there a statistically significant difference in GPA by major field of study?
-
-
-
+model <- aov(GPA ~ MajorField, data = df)
+print(anova(model))
+# There was a statistically difference in GPA by major field of study according to a one-way ANOVA (F(6, 243) = 2.1573, p < .05).
 
 ####
 # LIBRARY USAGE
@@ -132,47 +145,67 @@ print(
 # Question 9. How many respondents had ever used:
 #
 #     9a. The physical library? Is this proportion statistically significantly different from half?
+xt <- xtabs(~UsedPhysical, data = df)
+print(xt)
+print(binom.test(xt, p = (1 / 2), alternative = "two.sided"))
+#       Out of 250 respondents, 230 of them used the physical library. A two-sided exact binomial test indicated that these proportions were statistically significantly different from chance/half (p < 0.0001).
+
+#     9b. The online library system? Is this proportion statistically significantly different from half?
+xt <- xtabs(~UsedOnline, data = df)
+print(xt)
+print(binom.test(xt, p = (1 / 2), alternative = "two.sided"))
+#       Out of 250 respondents, 234 of them used the online library resources. A two-sided exact binomial test indicated that these proportions were statistically significantly different from chance/half (p < 0.0001).
 
 
-#     9b. The online library system? Is this proportion statistically significantly different from
-#         half?
+#### # TODO: ASK WOBBROCK WTH THIS QUESTION MEANS
+# WHAT DO YOU WANT WOBBROCK
+# Question 10. Plot the proportion of respondents who ever used the physical library and online library system side-by-side. (Hint: Use barplot() with two values combined with c().) Is the proportion of respondents who ever used the physical library statistically significantly different from the percentage of respondents who used the online library system? (Hint: In question 9a, you compared a proportion to 50%. This only requires a simple change to that.)
+
+# m <- ddply(df, ~ UsedPhysical + UsedOnline, function(data) {
+#     c(
+#         "Nrows" = nrow(data)
+#     )
+# })
+
+# barplot(c(230, 234),
+#     beside = TRUE,
+#     legend = TRUE,
+#     main = "Desktop and Mobile OS Preferences"
+# )
 
 
 
-
-####
-# Question 10. Plot the proportion of respondents who ever used the physical library and online
-#              library system side-by-side. (Hint: Use barplot() with two values combined with c().)
-#              Is the proportion of respondents who ever used the physical library statistically
-#              significantly different from the percentage of respondents who used the online library
-#              system? (Hint: In question 9a, you compared a proportion to 50%. This only requires a
-#              simple change to that.)
-
-
-
-
-####
+#### # TODO: ask wobbrock how to report a non-result
 # Question 11. Is there a statistically significant difference in GPA:
 #
 #    11a. By whether respondents ever used the physical library?
+print(t.test(GPA ~ UsedPhysical, data = df, var.equal = TRUE))
+#   There was no statistically significant difference for GPA between respondents who used the physical library and who didn't use the physical library.
 
 
 #    11b. By whether respondents ever used the online library system?
-
-
+print(t.test(GPA ~ UsedOnline, data = df, var.equal = TRUE))
+#   There was no statistically significant difference for GPA between respondents who used the online library resources and who didn't use the physical library.
 
 
 ####
 # Question 12. What was the average hours per week (and standard deviation) spent by respondents:
 #
 #    12a. In the physical library?
-
+print(mean(df$HoursPhysical))
+print(sd(df$HoursPhysical))
+#       The average hours per week spent in the physical library by all respondents was 7.632 with a standard deviation of 4.325.
 
 #    12b. Accessing the online library system?
+print(mean(df$HoursOnline))
+print(sd(df$HoursOnline))
+#       The average hours per week spent in the online library system by all respondents was 9.264 with a standard deviation of 6.23.
 
 
 #    12c. On social media?
-
+print(mean(df$HoursSocial))
+print(sd(df$HoursSocial))
+#       The average hours per week spent in the online library system by all respondents was 10.384 with a standard deviation of 6.818.
 
 
 
