@@ -157,8 +157,6 @@ print(binom.test(xt, p = (1 / 2), alternative = "two.sided"))
 #       Out of 250 respondents, 234 of them used the online library resources. A two-sided exact binomial test indicated that these proportions were statistically significantly different from chance/half (p < 0.0001).
 
 
-#### # TODO: ASK WOBBROCK WTH THIS QUESTION MEANS
-# WHAT DO YOU WANT WOBBROCK
 # Question 10. Plot the proportion of respondents who ever used the physical library and online library system side-by-side. (Hint: Use barplot() with two values combined with c().) Is the proportion of respondents who ever used the physical library statistically significantly different from the percentage of respondents who used the online library system? (Hint: In question 9a, you compared a proportion to 50%. This only requires a simple change to that.)
 
 # m <- ddply(df, ~ UsedPhysical + UsedOnline, function(data) {
@@ -167,25 +165,28 @@ print(binom.test(xt, p = (1 / 2), alternative = "two.sided"))
 #     )
 # })
 
-# barplot(c(230, 234),
+# print("HELLO WORLD")
+# print(m)
+
+# barplot(c(
+
+# ),
 #     beside = TRUE,
 #     legend = TRUE,
 #     main = "Desktop and Mobile OS Preferences"
 # )
 
 
-
-#### # TODO: ask wobbrock how to report a non-result
 # Question 11. Is there a statistically significant difference in GPA:
 #
 #    11a. By whether respondents ever used the physical library?
 print(t.test(GPA ~ UsedPhysical, data = df, var.equal = TRUE))
-#   There was no statistically significant difference for GPA between respondents who used the physical library and who didn't use the physical library.
+#   There was no statistically significant difference found for the GPA between respondents who used the physical library and who didn't use the physical library (t(248) = 0.07761, n.s.).
 
 
 #    11b. By whether respondents ever used the online library system?
 print(t.test(GPA ~ UsedOnline, data = df, var.equal = TRUE))
-#   There was no statistically significant difference for GPA between respondents who used the online library resources and who didn't use the physical library.
+#   There was no statistically significant difference for found for the GPA between respondents who used the online library resources and who didn't use the online library resources (t(248) = 0.81506, n.s.).
 
 
 ####
@@ -210,74 +211,80 @@ print(sd(df$HoursSocial))
 
 
 ####
-# Question 13. What is the statistical correlation between the following? Also, is the correlation
-#              statistically significant? Be sure to interpret each result. (Hint: Use cor.test().
-#              For this and other correlation questions, interpret 0.10 <= |r| < .20 as "weak,"
-#              0.20 <= |r| < 0.40 as "mild," 0.40 <= |r| < 0.60 as "moderate," 0.60 <= |r| < 0.80
-#              as "strong," and |r| >= 0.80 as "very strong.")
+# Question 13. What is the statistical correlation between the following? Also, is the correlation statistically significant? Be sure to interpret each result. (Hint: Use cor.test(). For this and other correlation questions, interpret 0.10 <= |r| < .20 as "weak," 0.20 <= |r| < 0.40 as "mild," 0.40 <= |r| < 0.60 as "moderate," 0.60 <= |r| < 0.80 as "strong," and |r| >= 0.80 as "very strong.")
 #
 #    13a. Hours spent in the physical library and hours spent accessing the online library system?
-
+print(cor.test(df$HoursPhysical, df$HoursOnline))
+#   We found no correlation between a respondents number of hours spent using the physical library and their number of hours spent using the online library system.
 
 #    13b. Hours spent using the physical library and hours spent on social media?
-
+print(cor.test(df$HoursPhysical, df$HoursSocial))
+#   We found no correlation between a respondents number of hours spent using the physical library and their number of hours spent using social media.
 
 #    13c. Hours spent accessing the online library system and hours spent on social media?
-
+print(cor.test(df$HoursOnline, df$HoursSocial))
+#   We found no correlation between a respondents number of hours spent using the online library system and their number of hours using social media.
 
 #    13d. Hours spent in the physical library and GPA?
-
+print(cor.test(df$HoursPhysical, df$GPA))
+#   We found a weak correlation between a respondents number of hours spent using the physical library and their GPA.
 
 #    13e. Hours spent accessing the online library system and GPA?
-
+print(cor.test(df$HoursOnline, df$GPA))
+#   We found no correlation between a respondents number of hours spent using the online library system and their GPA.
 
 #    13f. Hours spent on social media and GPA?
-
-
+print(cor.test(df$HoursSocial, df$GPA))
+#   We found a weak correlation between a respondents number of hours spent using social media and their GPA.
 
 
 ####
 # LIBRARY ACCESS
 ####
-# Question 14. Concerning the distribution of computing devices typically used to access the online
-#              library system:
+# Question 14. Concerning the distribution of computing devices typically used to access the online library system:
 #
 #    14a. Plot the distribution of devices used. How many respondents indicated each device?
-
+plot(df$Device)
+print(table(df$Device))
+# The number of devices used to access the online library system.
+#    desktop     laptop      other smartphone     tablet
+#        116         54         19         22         39
 
 #    14b. Is this distribution of devices significantly different from uniform?
-
+xt <- xtabs(~Device, data = df)
+print(xt)
+print(chisq.test(xt))
+#   A one-sample Pearson Chi-Squared test indicated that these proportions were statistically significantly different from chance (χ2(4, N=250) = 124.76, p < .0001).
 
 
 
 ####
-# Question 15. Concerning the distribution of respondents’ preferences for accessing the university
-#              library’s resources:
+# Question 15. Concerning the distribution of respondents’ preferences for accessing the university library’s resources:
 #
-#    15a. Plot the distribution of respondents’ preferences. How many respondents indicated each
-#         preference?
-
+#    15a. Plot the distribution of respondents’ preferences. How many respondents indicated each preference?
+plot(df$AccessPref)
+print(table(df$AccessPref))
+# The number of respondent preferences for using the library resources.
+# in-person no preference        online
+#        69            15           166
 
 #    15b. Is this distribution of preferences significantly different from uniform?
+xt <- xtabs(~AccessPref, data = df)
+print(xt)
+print(chisq.test(xt))
+#   A one-sample Pearson Chi-Squared test indicated that these proportions were statistically significantly different from chance (χ2(2, N=250) = 140.5, p < .0001).
 
-
-#    15c. Is there a significant association between respondents’ major field of study and how they
-#         prefer to access the university library’s resources? (Hint: You have learned three different
-#         two-sample tests of association;[1] pick one to use. Ignore any warnings. Also, plot the
-#         crosstabs created with xtabs() to help you see any differences in proportion, or lack thereof.)
+#    15c. Is there a significant association between respondents’ major field of study and how they prefer to access the university library’s resources? (Hint: You have learned three different two-sample tests of association;[1] pick one to use. Ignore any warnings. Also, plot the crosstabs created with xtabs() to help you see any differences in proportion, or lack thereof.)
 #
-#         [1] These are chisq.test(), G.test(), and fisher.test(). Whichever test you choose should
-#             be used consistently throughout this assignment. If you choose fisher.test(), you will
-#             need to set the simulate.p.value parameter to TRUE.
-
-
-
+#         [1] These are chisq.test(), G.test(), and fisher.test(). Whichever test you choose should be used consistently throughout this assignment. If you choose fisher.test(), you will need to set the simulate.p.value parameter to TRUE.
+xt <- xtabs(~ MajorField + AccessPref, data = df)
+print(xt)
+plot(xt)
+print(chisq.test(xt))
+#   A two-sample Pearson Chi- Squared test indicated a statistically significant association between respondents major field and their access preference (χ2(12, N=250) = 21.489, p < .05).
 
 ####
-# Question 16. For respondents that expressed a preference for in-person or online library access (N=235),
-# was the preference for in-person access (N=69) significantly different than the preference for online
-# access (N=166)? (Hint: What you did for question 10 should be relevant here.)
-
+# Question 16. For respondents that expressed a preference for in-person or online library access (N=235), was the preference for in-person access (N=69) significantly different than the preference for online access (N=166)? (Hint: What you did for question 10 should be relevant here.)
 
 
 
