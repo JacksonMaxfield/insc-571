@@ -292,19 +292,38 @@ print(chisq.test(xt))
 # Question 17. Concerning the types of resources sought by respondents:
 #
 #    17a. Plot the distribution of resources sought. How many of each type of resource is sought?
+plot(df$ResourceSeek)
+print(table(df$ResourceSeek))
+# The number of respondent sought each type of resource
+#books     conference proceedings          journals             multimedia                  other 
+#84                     62                     77                     23                      4 
 
 
 #    17b. Is this distribution of resources significantly different from uniform?
+xt <- xtabs(~ResourceSeek, data = df)
+print(xt)
+print(chisq.test(xt))
+#   A one-sample Pearson Chi-Squared test indicated that these proportions were statistically significantly different from chance (χ2(4, N=250) = 97.48, p < .0001).
 
 
 #    17c. Is there a significant association between how respondents prefer to access the library’s
 #         resources and the type of resource they most often seek? (Hint: Hint: For this and any
 #         following two-sample tests of association, refer back to what you did for question 15c,
 #         including plotting the crosstabs to aid interpretation.)
-
+xt <- xtabs(~ ResourceSeek + AccessPref, data = df)
+print(xt)
+plot(xt)
+print(chisq.test(xt))
+#   A two-sample Pearson Chi- Squared test indicated there was no statistically significant association between how respondents prefer to access the library’s
+#         resources and the type of resource they most often seek (χ2(8, N=250) = 12.098,n.s.).
 
 #    17d. Is there a significant association between respondents’ major field of study and the type
 #         of resource they most often seek?
+xt <- xtabs(~ MajorField + ResourceSeek, data = df)
+print(xt)
+plot(xt)
+print(chisq.test(xt))
+#   A two-sample Pearson Chi- Squared test indicated a statistically significant association between respondents access preference and the type of resource they most often seek (χ2(24, N=250) = 95.273, p < .0001).
 
 
 
@@ -314,38 +333,69 @@ print(chisq.test(xt))
 #
 #    18a. Plot the distribution of responses. How many respondents indicated each response (1-7)?
 #         For ease of presentation, you can show a simple table.
+plot(df$HowOftenFind)
+print(table(df$HowOftenFind))
+# The number of respondent sought each type of resource
+#Never or almost never   Rarely  Less than half the time     About half the time     More than half the time     Often   Always or almost never 
+#2                       5           26                       65                         78                       50      24 
 
-
+# TODO: why the hint mention xmulti? given that our sample size is >200
 #    18b. Is this distribution of responses significantly different from uniform?  (Hint: xmulti()
 #         will produce a warning due to potential running time; use xmonte() instead. The syntax is
 #         otherwise the same as xmulti().)
+xt <- xtabs(~HowOftenFind, data = df)
+print(xt)
+print(chisq.test(xt))
+#   A one-sample Pearson Chi-Squared test indicated that these proportions were statistically significantly different from chance (χ2(6, N=250) = 144.52, p < .0001).
 
 
 #    18c. Is there a significant association between the computing device respondents typically use
 #         to access the online library system and how often they find what they seek?
+xt <- xtabs(~ HowOftenFind + Device, data = df)
+print(xt)
+plot(xt)
+print(chisq.test(xt))
+#  A two-sample Pearson Chi- Squared test indicated there was no statistically significant association between the computing device respondents typically use
+#         to access the online library system and how often they find what they seek (χ2(24, N=250) = 25.353,n.s.).
 
 
 #    18d. Is there a significant association between how respondents prefer to access the library’s
 #         resources and how often they find the library item they seek?
-
+xt <- xtabs(~ HowOftenFind + AccessPref, data = df)
+print(xt)
+plot(xt)
+print(chisq.test(xt))
+#  A two-sample Pearson Chi- Squared test indicated there was no statistically significant association between how respondents prefer to access the library’s
+#         resources and how often they find the library item they seek (χ2(12, N=250) = 9.2245,n.s.).
 
 #    18e. Is there a significant association between what type of resource respondents most often seek
 #         and how often they find what they seek?
-
+xt <- xtabs(~ HowOftenFind + ResourceSeek, data = df)
+print(xt)
+plot(xt)
+print(chisq.test(xt))
+#   A two-sample Pearson Chi- Squared test indicated a statistically significant association between what type of resource respondents most often seek
+#         and how often they find what they seek (χ2(24, N=250) = 116.56, p < .0001).
 
 #    18f. What is the statistical correlation between weekly hours spent in the physical library and
 #         how often respondents find what they seek? (Hint: Consider which type of correlation is
 #         appropriate here; look at the parameters for cor.test(). Also, you will need to use
 #         as.numeric() to wrap df$HowOftenFind. Ignore any warnings.)
-
+cor.test(df$HoursPhysical, as.numeric(df$HowOftenFind), method="spearman", exact=FALSE)
+#A spearmen rho test shows that there was a statistically significant correlation between weekly hours spent in the physical library and
+#         how often respondents find what they seek (rho = 0.15667, p < .05)
 
 #    18g. What is the statistical correlation between weekly hours spent accessing the online library
 #         system and how often respondents find what they seek?
-
+cor.test(df$HoursOnline, as.numeric(df$HowOftenFind), method="spearman", exact=FALSE)
+#A spearmen rho test shows that there was a statistically significant correlation between weekly hours spent accessing the online library
+#         system and how often respondents find what they seek (rho = 0.1428439, p < .05)
 
 #    18h. What is the statistical correlation between how often respondents find what they seek in the
 #         library and GPA?
-
+cor.test(df$GPA, as.numeric(df$HowOftenFind), method="spearman", exact=FALSE)
+#A spearmen rho test shows that there was a statistically significant correlation between how often respondents find what they seek in the
+#         library and GPA (rho = 0.1393051, p < .05)
 
 
 
@@ -356,6 +406,10 @@ print(chisq.test(xt))
 #
 #    19a. Plot the distribution of responses. How many respondents indicated each response (1-7)? For
 #         ease of presentation, you can show a simple table.
+plot(df$SatisfiedPhysical)
+print(table(df$SatisfiedPhysical))
+#Very dissatisfied   2  3  4  5  6  7 
+#15                   24 45 44 58 35 29 
 
 
 #    19b. Is this distribution of responses significantly different from uniform? (Hint: Recall what
