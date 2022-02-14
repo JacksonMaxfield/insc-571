@@ -65,6 +65,7 @@ print(table(df$Gender))
 
 
 
+
 ####
 # Question 4. What was the average matriculation year of respondents?
 # Include standard deviation. (Note: Treat “5th+” as a “5”.)
@@ -87,12 +88,17 @@ print(table(df$MajorField))
 # and 15 where in other majors.
 
 
+
+
 ####
 # Question 6. Plot a histogram of GPA. Describe what you see.
 hist(df$GPA)
 # The most common GPA for a respondent falls between 3.5 and 4.0 GPA,
 # with a left-skew
 # TODO: FIGURE THIS OUT
+
+
+
 
 ####
 # Question 7. What was the average GPA (and standard deviation),
@@ -103,6 +109,8 @@ print(round(mean(df$GPA), 2))
 print(round(sd(df$GPA), 2))
 #       The average GPA of all respondents was 3.05 with a
 #       standard deviation of 0.85.
+
+
 
 #     7b. Of respondents by year? Feel free to show a table.
 #         Also, make a plot to show this. (Hint: You will want to treat
@@ -129,6 +137,7 @@ print(
 #       standard deviation of 0.91.
 
 
+
 #     7c. Of respondents by major field of study? Feel free to show a table.
 #         Also, make a plot to show this.
 plot(GPA ~ MajorField, data = df)
@@ -151,6 +160,8 @@ print(
 # 7  social science     3.27   0.76
 
 
+
+
 #### TODO: Verify
 # Question 8. Is there a statistically significant difference in GPA by
 # major field of study?
@@ -158,6 +169,9 @@ model <- aov(GPA ~ MajorField, data = df)
 print(anova(model))
 # There was a statistically difference in GPA by major field of study
 # according to a one-way ANOVA (F(6, 243) = 2.1573, p < .05).
+
+
+
 
 ####
 # LIBRARY USAGE
@@ -173,6 +187,8 @@ print(binom.test(xt, p = (1 / 2), alternative = "two.sided"))
 #       A two-sided exact binomial test indicated that these proportions were
 #       statistically significantly different from chance/half (p < 0.0001).
 
+
+
 #     9b. The online library system? Is this proportion statistically
 #         significantly different from half?
 xt <- xtabs(~UsedOnline, data = df)
@@ -181,6 +197,8 @@ print(binom.test(xt, p = (1 / 2), alternative = "two.sided"))
 #       Out of 250 respondents, 234 of them used the online library resources.
 #       A two-sided exact binomial test indicated that these proportions were
 #       statistically significantly different from chance/half (p < 0.0001).
+
+
 
 
 # Question 10. Plot the proportion of respondents who ever used the physical
@@ -209,6 +227,8 @@ print(binom.test(xt, p = (1 / 2), alternative = "two.sided"))
 # )
 
 
+
+
 # Question 11. Is there a statistically significant difference in GPA:
 #
 #    11a. By whether respondents ever used the physical library?
@@ -218,11 +238,14 @@ print(t.test(GPA ~ UsedPhysical, data = df, var.equal = TRUE))
 #   library (t(248) = 0.07761, n.s.).
 
 
+
 #    11b. By whether respondents ever used the online library system?
 print(t.test(GPA ~ UsedOnline, data = df, var.equal = TRUE))
 #   There was no statistically significant difference for found for the GPA
 #   between respondents who used the online library resources and who didn't
 #   use the online library resources (t(248) = 0.81506, n.s.).
+
+
 
 
 ####
@@ -235,6 +258,8 @@ print(sd(df$HoursPhysical))
 #       The average hours per week spent in the physical library by
 #       all respondents was 7.632 with a standard deviation of 4.325.
 
+
+
 #    12b. Accessing the online library system?
 print(mean(df$HoursOnline))
 print(sd(df$HoursOnline))
@@ -242,11 +267,13 @@ print(sd(df$HoursOnline))
 #       all respondents was 9.264 with a standard deviation of 6.23.
 
 
+
 #    12c. On social media?
 print(mean(df$HoursSocial))
 print(sd(df$HoursSocial))
 #       The average hours per week spent in the online library system by
 #       all respondents was 10.384 with a standard deviation of 6.818.
+
 
 
 
@@ -265,6 +292,8 @@ print(cor.test(df$HoursPhysical, df$HoursOnline))
 #    using the physical library and their number of hours spent using the
 #    online library system.
 
+
+
 #    13b. Hours spent using the physical library and hours spent on
 #         social media?
 print(cor.test(df$HoursPhysical, df$HoursSocial))
@@ -272,26 +301,36 @@ print(cor.test(df$HoursPhysical, df$HoursSocial))
 #   using the physical library and their number of hours spent using
 #   social media.
 
+
+
 #    13c. Hours spent accessing the online library system and hours spent
 #         on social media?
 print(cor.test(df$HoursOnline, df$HoursSocial))
 #   We found no correlation between a respondents number of hours spent using
 #   the online library system and their number of hours using social media.
 
+
+
 #    13d. Hours spent in the physical library and GPA?
 print(cor.test(df$HoursPhysical, df$GPA))
 #   We found a weak correlation between a respondents number of hours spent
 #   using the physical library and their GPA.
+
+
 
 #    13e. Hours spent accessing the online library system and GPA?
 print(cor.test(df$HoursOnline, df$GPA))
 #   We found no correlation between a respondents number of hours spent using
 #   the online library system and their GPA.
 
+
+
 #    13f. Hours spent on social media and GPA?
 print(cor.test(df$HoursSocial, df$GPA))
 #   We found a weak correlation between a respondents number of hours spent
 #   using social media and their GPA.
+
+
 
 
 ####
@@ -308,6 +347,8 @@ print(table(df$Device))
 #    desktop     laptop      other smartphone     tablet
 #        116         54         19         22         39
 
+
+
 #    14b. Is this distribution of devices significantly different from uniform?
 xt <- xtabs(~Device, data = df)
 print(xt)
@@ -315,6 +356,7 @@ print(chisq.test(xt))
 #   A one-sample Pearson Chi-Squared test indicated that these proportions were
 #   statistically significantly different from chance
 #   (χ2(4, N=250) = 124.76, p < .0001).
+
 
 
 
@@ -330,6 +372,8 @@ print(table(df$AccessPref))
 # in-person no preference        online
 #        69            15           166
 
+
+
 #    15b. Is this distribution of preferences significantly different from
 #         uniform?
 xt <- xtabs(~AccessPref, data = df)
@@ -338,6 +382,8 @@ print(chisq.test(xt))
 #   A one-sample Pearson Chi-Squared test indicated that these proportions were
 #   statistically significantly different from chance
 #   (χ2(2, N=250) = 140.5, p < .0001).
+
+
 
 #    15c. Is there a significant association between respondents’ major
 #         field of study and how they prefer to access the university library’s
@@ -358,12 +404,16 @@ print(chisq.test(xt))
 #   significant association between respondents major field and their
 #   access preference (χ2(12, N=250) = 21.489, p < .05).
 
+
+
+
 ####
 # Question 16. For respondents that expressed a preference for
 # in-person or online library access (N=235), was the preference for
 # in-person access (N=69) significantly different than the preference
 # for online access (N=166)? (Hint: What you did for question 10 should
 # be relevant here.)
+# TODO
 
 
 
@@ -379,6 +429,7 @@ print(table(df$ResourceSeek))
 # 84                     62                     77                     23                      4
 
 
+
 #    17b. Is this distribution of resources significantly different
 #         from uniform?
 xt <- xtabs(~ResourceSeek, data = df)
@@ -387,6 +438,7 @@ print(chisq.test(xt))
 #   A one-sample Pearson Chi-Squared test indicated that these proportions were
 #   statistically significantly different from chance
 #   (χ2(4, N=250) = 97.48, p < .0001).
+
 
 
 #    17c. Is there a significant association between how respondents
@@ -402,6 +454,8 @@ print(chisq.test(xt))
 #   significant association between how respondents prefer to access the
 #   library’s resources and the type of resource they most often seek
 #   (χ2(8, N=250) = 12.098,n.s.).
+
+
 
 #    17d. Is there a significant association between respondents’ major
 #         field of study and the type of resource they most often seek?
@@ -430,6 +484,8 @@ print(table(df$HowOftenFind))
 # Never or almost never   Rarely  Less than half the time     About half the time     More than half the time     Often   Always or almost never
 # 2                       5           26                       65                         78                       50      24
 
+
+
 # TODO: why the hint mention xmulti? given that our sample size is >200
 #    18b. Is this distribution of responses significantly different
 #         from uniform? (Hint: xmulti() will produce a warning due to
@@ -441,6 +497,7 @@ print(chisq.test(xt))
 #   A one-sample Pearson Chi-Squared test indicated that these proportions were
 #   statistically significantly different from chance
 #   (χ2(6, N=250) = 144.52, p < .0001).
+
 
 
 #    18c. Is there a significant association between the computing device
@@ -456,6 +513,7 @@ print(chisq.test(xt))
 #  what they seek (χ2(24, N=250) = 25.353,n.s.).
 
 
+
 #    18d. Is there a significant association between how respondents prefer
 #         to access the library’s resources and how often they find the
 #         library item they seek?
@@ -468,6 +526,8 @@ print(chisq.test(xt))
 #  library’s resources and how often they find the library item they seek
 #  (χ2(12, N=250) = 9.2245,n.s.).
 
+
+
 #    18e. Is there a significant association between what type of resource
 #         respondents most often seek and how often they find what they seek?
 xt <- xtabs(~ HowOftenFind + ResourceSeek, data = df)
@@ -477,6 +537,8 @@ print(chisq.test(xt))
 #   A two-sample Pearson Chi- Squared test indicated a statistically significant
 #   association between what type of resource respondents most often seek
 #   and how often they find what they seek (χ2(24, N=250) = 116.56, p < .0001).
+
+
 
 #    18f. What is the statistical correlation between weekly hours spent in the
 #         physical library and how often respondents find what they seek?
@@ -495,6 +557,8 @@ print(
 # correlation between weekly hours spent in the physical library and how
 # often respondents find what they seek (rho = 0.15667, p < .05)
 
+
+
 #    18g. What is the statistical correlation between weekly hours spent
 #         accessing the online library system and how often respondents
 #         find what they seek?
@@ -510,6 +574,8 @@ print(
 # correlation between weekly hours spent accessing the online library
 # system and how often respondents find what they seek
 # (rho = 0.1428439, p < .05)
+
+
 
 #    18h. What is the statistical correlation between how often respondents
 #         find what they seek in the library and GPA?
@@ -527,6 +593,7 @@ print(
 
 
 
+
 ####
 # COLLECTION SATISFACTION
 ####
@@ -538,8 +605,9 @@ print(
 #         table.
 plot(df$SatisfiedPhysical)
 print(table(df$SatisfiedPhysical))
-# Very dissatisfied   2  3  4  5  6  7
-# 15                  24 45 44 58 35 29
+# Satisfaction  1  2  3  4  5  6  7
+# Count         15 24 45 44 58 35 29
+
 
 
 #    19b. Is this distribution of responses significantly different from
@@ -550,6 +618,8 @@ print(chisq.test(xt))
 #   A one-sample Pearson Chi-Squared test indicated that these proportions were
 #   statistically significantly different from chance
 #   (χ2(6, N=250) = 35.376, p < .0001).
+
+
 
 #    19c. Is there a significant association between how respondents prefer to
 #         access the university library and their satisfaction with the
@@ -563,6 +633,8 @@ print(chisq.test(xt))
 #  respondent was to the library's physical collection
 #  (χ2(12, N=250) = 10.243, n.s.).
 
+
+
 #    19d. Is there a significant association between what type of resource
 #         respondents most often seek and their satisfaction with the
 #         library’s physical collection?
@@ -575,6 +647,8 @@ print(chisq.test(xt))
 #  trying to find and their satisfaction with the library's physical collection
 #  (χ2(24, N=250) = 13.058, n.s.).
 
+
+
 #    19e. Is there a significant association between how often respondents find
 #         what they seek in the library and their satisfaction with the
 #         library’s physical collection?
@@ -586,6 +660,8 @@ print(chisq.test(xt))
 #  significant association between how often each respondent found what they
 #  were looking for and their satisfaction with the library's physical
 #  collection (χ2(36, N=250) = 45.297, n.s.).
+
+
 
 #    19f. What is the statistical correlation between how often respondents
 #         find what they seek in the library and their satisfaction with the
@@ -603,6 +679,8 @@ print(
 # looking for and how satisfied they were with the library's physical
 # resources (rho = 0.2369941, p < .001)
 
+
+
 #    19g. What is the statistical correlation between respondents’ weekly
 #         hours spent in the physical library and their satisfaction with
 #         the library’s physical collection?
@@ -619,6 +697,8 @@ print(
 # library and how satisfied they were with the library's physical resources
 # (rho = 0.3420017, p < .00001)
 
+
+
 #    19h. What is the statistical correlation between respondents’ GPA and
 #         their satisfaction with the library’s physical collection?
 print(
@@ -633,6 +713,8 @@ print(
 # correlation between a respondents GPA and how satisfied they were with
 # the library's physical resources (rho = 0.05917, n.s.).
 
+
+
 #    19i. Is there a statistically significant difference in satisfaction
 #         with the library’s physical collection by whether respondents ever
 #         used the physical library? (Hint: SatisfiedPhysical is an ordinal
@@ -643,8 +725,10 @@ m <- aov(as.numeric(SatisfiedPhysical) ~ UsedPhysical, data = df) # fit model
 plot(df$SatisfiedPhysical, df$UsedPhysical)
 print(anova(m))
 # The difference in satisfaction between respondents who have used the physical
-# library resources vs not, were statistically significant according to a
+# library resources vs not, was statistically significant according to a
 # one-way ANOVA (F(1, 248) = 6.4107, p < .05).
+
+
 
 #    19j. Is there a statistically significant difference in satisfaction with
 #         the library’s physical collection by major field of study? Make a
@@ -657,6 +741,10 @@ print(anova(m))
 # (F(6, 243) = 2.0173, n.s.).
 
 
+
+# TODO: shouldn't all the "different from uniform" tests be replaced by
+# binom? or similar test?
+
 ####
 # Question 20. Concerning respondents’ satisfaction with the library’s online
 # collection:
@@ -664,65 +752,184 @@ print(anova(m))
 #    20a. Plot the distribution of responses. How many respondents indicated
 #         each response (1-7)? For ease of presentation, you can show a simple
 #         table.
+plot(df$SatisfiedOnline)
+print(table(df$SatisfiedOnline))
+# Satisfaction  1  2  3  4  5  6  7
+# Count         4 24 63 75 51 18 15
+
 
 
 #    20b. Is this distribution of responses significantly different from
 #         uniform?
+xt <- xtabs(~SatisfiedOnline, data = df)
+print(xt)
+print(chisq.test(xt))
+#   A one-sample Pearson Chi-Squared test indicated that these proportions were
+#   statistically significantly different from chance
+#   (χ2(6, N=250) = 123.41, p < .0001).
+
 
 
 #    20c. Is there a significant association between respondents’ typically
 #         used computing devices and their satisfaction with the library’s
 #         online collection?
+xt <- xtabs(~ Device + SatisfiedOnline, data = df)
+print(xt)
+plot(xt)
+print(chisq.test(xt))
+#  A two-sample Pearson Chi- Squared test indicated there was no statistically
+#  significant association between the device selection and how satisfied a
+#  respondent was to the library's online collection
+#  (χ2(24, N=250) = 22.214, n.s.).
+
 
 
 #    20d. Is there a significant association between how respondents prefer
 #         to access the university library and their satisfaction with the
 #         library’s online collection?
+xt <- xtabs(~ AccessPref + SatisfiedOnline, data = df)
+print(xt)
+plot(xt)
+print(chisq.test(xt))
+#  A two-sample Pearson Chi- Squared test indicated there was no statistically
+#  significant association between respondent access preference and their
+#  satisfaction with the library's online collection
+#  (χ2(12, N=250) = 17.134, n.s.).
+
 
 
 #    20e. Is there a significant association between what type of resource
 #         respondents most often seek and their satisfaction with the
 #         library’s online collection?
+xt <- xtabs(~ ResourceSeek + SatisfiedOnline, data = df)
+print(xt)
+plot(xt)
+print(chisq.test(xt))
+#  A two-sample Pearson Chi- Squared test indicated there was no statistically
+#  significant association between the resource respondents most often tried
+#  to seek and their satisfaction with the library's online collection
+#  (χ2(24, N=250) = 31.901, n.s.).
+
 
 
 #    20f. Is there a significant association between how often respondents
 #         find what they seek in the library and their satisfaction with the
 #         library’s online collection?
+xt <- xtabs(~ HowOftenFind + SatisfiedOnline, data = df)
+print(xt)
+plot(xt)
+print(chisq.test(xt))
+#  A two-sample Pearson Chi- Squared test indicated there was a statistically
+#  significant association between how often respondents were able to find the
+#  resource they were seeking and their satisfaction with the library's online
+#  collection (χ2(36, N=250) = 57.539, p<0.05).
+
 
 
 #    20g. What is the statistical correlation between how often respondents
 #         find what they seek in the library and their satisfaction with the
 #         library’s online collection?
+print(
+    cor.test(
+        as.numeric(df$HowOftenFind),
+        as.numeric(df$SatisfiedOnline),
+        method = "spearman",
+        exact = FALSE
+    )
+)
+# A spearmen rho test shows that there was a statistically significant
+# correlation between how often each respondent found what they were
+# looking for and how satisfied they were with the library's online
+# resources (rho = 0.3499714, p < .00001).
+
 
 
 #    20h. What is the statistical correlation between respondents’ weekly
 #         hours spent accessing the online library system and their
 #         satisfaction with the library’s online collection?
+print(
+    cor.test(
+        df$HoursOnline,
+        as.numeric(df$SatisfiedOnline),
+        method = "spearman",
+        exact = FALSE
+    )
+)
+# A spearmen rho test shows that there was a statistically significant
+# correlation between how many hours respondents spent online and how
+# satisfied they were with the library's online resources
+# (rho = 0.3790529, p < .00001).
+
 
 
 #    20i. Is there a significant association between respondents’ satisfaction
 #         with the library’s physical and online collections?
+xt <- xtabs(~ SatisfiedPhysical + SatisfiedOnline, data = df)
+print(xt)
+plot(xt)
+print(chisq.test(xt))
+#  A two-sample Pearson Chi- Squared test indicated there was no statistically
+#  significant association between respondents satisfaction with the library's
+#  physical and online collections (χ2(36, N=250) = 39.223, n.s.).
+
 
 
 #    20j. What is the statistical correlation between respondents’
 #         satisfaction with the library’s physical and online collections?
+print(
+    cor.test(
+        as.numeric(df$SatisfiedPhysical),
+        as.numeric(df$SatisfiedOnline),
+        method = "spearman",
+        exact = FALSE
+    )
+)
+# A spearmen rho test shows that there was a statistically significant
+# correlation between respondents satisfaction with the library's
+# physical and online collections (rho = 0.1387893, p < .05).
+
 
 
 #    20k. What is the statistical correlation between respondents’ GPA and their
 #         satisfaction with the library’s online collection?
+print(
+    cor.test(
+        df$GPA,
+        as.numeric(df$SatisfiedOnline),
+        method = "spearman",
+        exact = FALSE
+    )
+)
+# A spearmen rho test shows that there was no statistically significant
+# correlation between respondents GPA and their satisfaction with the
+# library's online collections (rho = 0.05356785, n.s.).
+
 
 
 #    20l. Is there a statistically significant difference in satisfaction
 #         with the library’s online collection by whether respondents ever
 #         used the online library system? Make a plot to help interpret the
 #         results. (Hint: Recall what you did for question 19i.)
+m <- aov(as.numeric(SatisfiedOnline) ~ UsedOnline, data = df) # fit model
+plot(df$SatisfiedOnline, df$UsedOnline)
+print(anova(m))
+# The difference in satisfaction between respondents who have used the online
+# library resources vs not, was not statistically significant according to a
+# one-way ANOVA (F(1, 248) = 2.1176, n.s.).
+
 
 
 #    20m. Is there a statistically significant difference in satisfaction
 #         with the library’s online collection by major field of study?
 #         Make a plot to help interpret the results. (Hint: Recall what you
 #         did for question 19j.)
-
+m <- aov(as.numeric(SatisfiedOnline) ~ MajorField, data = df) # fit model
+plot(df$SatisfiedOnline, df$MajorField)
+print(anova(m))
+exit()
+# The difference in satisfaction between respondents major field,
+# was not statistically significant according to a one-way ANOVA
+# (F(6, 243) = 1.0581, n.s.).
 
 
 
@@ -745,6 +952,9 @@ print(anova(m))
 # GPA of HoursPhysical (F(1, 246) = 6.9530, p < .01) and HoursSocial
 # (F(1, 246) = 8.6472, p < .005), but not for HoursOnline
 # (F(1, 246) = 1.7947, n.s.).
+
+
+
 
 ####
 # Question 22. Build a full linear regression model and then use stepwise
@@ -774,14 +984,17 @@ print(summary(mb))
 # 0.05826 and the adjusted R-squared statistic is 0.05064.
 
 
+
 #    22b. What is the AIC of each model? Explain your results.
 #         (Hint: Use AIC() on each model. Lower is better.)
 print(AIC(ma))
 print(AIC(mb))
 
 
+
 #    22c. What is the BIC of each model? Explain your results.
 #         (Hint: Use BIC() on each model. Lower is better.)
+
 
 
 #    22d. Besides R^2, Adj. R^2, AIC, and BIC, one way to assess how well a
@@ -808,12 +1021,14 @@ print(AIC(mb))
 # mean(abs(iris$Sepal.Length – predict(mb, data=iris)))
 
 
+
 #    22e. Stepping back and looking at each model overall, which would you
 #         settle on as your preferred model for predicting GPA from answers
 #         to a structured survey? Why? (Note: This question does not require
 #         any R code, only R comments.)
 # bic model because simpler
 # TODO:
+
 
 
 
