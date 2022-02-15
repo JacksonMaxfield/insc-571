@@ -200,7 +200,7 @@ print(binom.test(xt, p = (1 / 2), alternative = "two.sided"))
 
 
 
-
+# TODO:
 # Question 10. Plot the proportion of respondents who ever used the physical
 # library and online library system side-by-side. (Hint: Use barplot() with
 # two values combined with c().) Is the proportion of respondents who ever
