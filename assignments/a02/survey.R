@@ -743,7 +743,7 @@ print(anova(m))
 
 
 # TODO: shouldn't all the "different from uniform" tests be replaced by
-# binom? or similar test?
+# binom? or similar test? / this explains the xmulti thing i believe?
 
 ####
 # Question 20. Concerning respondents’ satisfaction with the library’s online
@@ -926,7 +926,6 @@ print(anova(m))
 m <- aov(as.numeric(SatisfiedOnline) ~ MajorField, data = df) # fit model
 plot(df$SatisfiedOnline, df$MajorField)
 print(anova(m))
-exit()
 # The difference in satisfaction between respondents major field,
 # was not statistically significant according to a one-way ANOVA
 # (F(6, 243) = 1.0581, n.s.).
@@ -970,15 +969,16 @@ m <- lm(GPA ~ . - PId, data = df)
 ma <- stepAIC(m, direction = "both", trace = FALSE, k = 2) # AIC
 mb <- stepAIC(m, direction = "both", trace = FALSE, k = log(nrow(df))) # BIC
 
-# TODO: add base model
+
 
 #    22a. Including the model intercept, how many terms are in each model?
 #         What are the R^2 and Adjusted R^2 model fits for each model?
-print("FULL MODEL OUTPUT")
+print(summary(m))
 print(summary(ma))
-print("HELLO")
 print(summary(mb))
-# There are 14 terms in the AIC model, the R-squared statistic is 0.175 and the
+# There are 45 terms in the base model the R-squared statistic is 0.2687 and
+# the adjusted R-squared statistic is 0.1073.
+# There are 15 terms in the AIC model, the R-squared statistic is 0.175 and the
 # adjusted R-squared statistic is 0.1221.
 # There are only 2 terms in the BIC model, the R-squared statistic is
 # 0.05826 and the adjusted R-squared statistic is 0.05064.
@@ -987,13 +987,27 @@ print(summary(mb))
 
 #    22b. What is the AIC of each model? Explain your results.
 #         (Hint: Use AIC() on each model. Lower is better.)
+print(AIC(m))
 print(AIC(ma))
 print(AIC(mb))
+# AIC is meant to help determine how well fit a model is to your data.
+# In this case, the base model has an AIC of 643.79, the stepwise AIC
+# model has an AIC of 613.92, and the stepwise BIC model has an AIC
+# of 621.00. Under AIC, our "best fit" model is the stepwise AIC
+# model.
 
 
 
 #    22c. What is the BIC of each model? Explain your results.
 #         (Hint: Use BIC() on each model. Lower is better.)
+print(BIC(m))
+print(BIC(ma))
+print(BIC(mb))
+# BIC is meant to help determine how well fit a model is to your data.
+# In this case, the base model has a BIC of 809.304, the stepwise AIC
+# model has a BIC of 673.79, and the stepwise BIC model has an BIC
+# of 635.09. Under BIC, our "best fit" model is the stepwise BIC
+# model.
 
 
 
@@ -1016,10 +1030,15 @@ print(AIC(mb))
 #             our model in this way is called k-fold cross-validation and is a
 #             common practice for evaluating machine learning models. For more,
 #             see Kassambara (2018c).
-# mean(abs(iris$Sepal.Length – predict(m, data=iris)))
-# mean(abs(iris$Sepal.Length – predict(ma, data=iris)))
-# mean(abs(iris$Sepal.Length – predict(mb, data=iris)))
-
+print(mean(abs(df$GPA - predict(m, data = df))))
+print(mean(abs(df$GPA - predict(ma, data = df))))
+print(mean(abs(df$GPA - predict(mb, data = df))))
+# The base model MAE is 0.601881, the stepwise AIC model MAE is 0.6384049, and
+# the stepwise BIC model MAE is 0.6869124. Our best performing model in this
+# case is the base model (with all the 45 parameters), but considering that
+# we get nearly as good of performance from just 2 parameters (with the
+# stepwise BIC model), it seems like those extra 43 parameters are only
+# contributing ~0.08 MAE improvement.
 
 
 #    22e. Stepping back and looking at each model overall, which would you
