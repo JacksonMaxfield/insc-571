@@ -126,33 +126,92 @@ print(
 
 
 ####
-# Step 3. Based on your EDA, report what you think will be the findings from the statistical tests
-#         that you will perform. (Do not revise your predictions after moving past this step. The
-#         correctness of your predictions is not being graded, only their completeness and
-#         articulation.)
+# Step 3. Based on your EDA, report what you think will
+# be the findings from the statistical tests that you will
+# perform. (Do not revise your predictions after moving past
+# this step. The correctness of your predictions is not
+# being graded, only their completeness and articulation.)
+
+# We will find that the time it takes to complete the task using
+# Google is statistically significantly less than the time it takes
+# to complete the task on either Yahoo or Bing.
+# We will find no statistically significant difference in the time
+# it takes to complete the task between Yahoo and Bing.
+# We will find that order does not have a statistically significant
+# effect on the time it takes to complete the task, therefore,
+# there were no order effects present in the study.
 
 
 
 
 ####
-# Step 4. Conduct tests for normality and sphericity. (Hint: When testing for normality, just test
-#         for the normality of the D.V. per level of the I.V.; do not worry about the normality of
-#         residuals. See this post by Karen Grace-Martin:
-#         http://www.theanalysisfactor.com/checking-normality-anova-model/.) Beneath your code,
-#         formally report the results of this step using comments. To give you an example, one
-#         report for a single normality test is shown below:
+# Step 4. Conduct tests for normality and sphericity.
+# (Hint: When testing for normality, just test for the
+# normality of the D.V. per level of the I.V.; do not
+# worry about the normality of residuals. See this post
+# by Karen Grace-Martin:
+# http://www.theanalysisfactor.com/checking-normality-anova-model/.)
+# Beneath your code, formally report the results of
+# this step using comments. To give you an example, one report
+# for a single normality test is shown below:
+# A Shapiro-Wilk test of normality shows no violation for
+# Bing (W=.960, p=.608).
+
+# Construct subsets by search engine
+google <- df[df$Engine == "Google", ]
+yahoo <- df[df$Engine == "Yahoo", ]
+bing <- df[df$Engine == "Bing", ]
+
+# Shapiro-Wilk for normality
+print(shapiro.test(google$Minutes))
+print(shapiro.test(yahoo$Minutes))
+print(shapiro.test(bing$Minutes))
+
+# google: W = 0.89608, p-value = 0.04911 (not-normal)
+# yahoo: W = 0.8779, p-value = 0.02407 (not-normal)
+# bing: W = 0.96032, p-value = 0.6078 (normal)
+
+# Mauchly sphericity violation test
+m <- ezANOVA(
+    data = df,
+    dv = Minutes,
+    within = c(Engine),
+    wid = Subject,
+    type = 3
+)
+print(m$Mauchly)
+
+# Mauchly sphericity: W = 0.978147, p-value = 0.8379789 (no violation)
+
+# We tested each level of the "Engine" factor (Google, Yahoo, Bing) for
+# violations of normality using Shapiro-Wilk tests. Google and Yahoo
+# show statistically significant deviations from normality
+# (Google: W=.896, p<.05; Yahoo: W=0.878, p<.05).
+# However, Bing showed no statistically significant deviation from normality
+# (W=.960, p=.608).
 #
-#         # A Shapiro-Wilk test of normality shows no violation for Bing (W=.960, p=.608).
+# We further, evaluated the "Engine" factor for violations of sphericity.
+# Our test was not statistically significant for the within-subjects
+# factor, which indicates no sphericity violation.
 
 
 
 
 ####
-# Step 5. Examine the conditional distribution of your response. Determine statistically whether you
-#         should transform your response. If so, transform it and then retest its normality. Beneath
-#         your code, formally report the results of this step using comments.
+# Step 5. Examine the conditional distribution of your response.
+# Determine statistically whether you should transform your response.
+# If so, transform it and then retest its normality.
+# Beneath your code, formally report the results of this step using comments.
 
+# Create fits for each engine
+fGoogle <- fitdistr(google$Minutes, "gamma")$estimate
+fYahoo <- fitdistr(yahoo$Minutes, "gamma")$estimate
+fBing <- fitdistr(bing$Minutes, "gamma")$estimate
 
+# Run all tests
+print(ks.test(google$Minutes, "pgamma", shape = fGoogle[1], rate = fGoogle[2]))
+print(ks.test(yahoo$Minutes, "pgamma", shape = fYahoo[1], rate = fYahoo[2]))
+print(ks.test(bing$Minutes, "pgamma", shape = fBing[1], rate = fBing[2]))
 
 
 ####
@@ -199,41 +258,65 @@ print(
 ####
 ## EXPERIMENT 02 SETUP ##
 ####
+df <- read.csv("experiment_02.csv")
 
-# you might want to set your working directory where your experiment_02.csv data file is
-# setwd("C:\\example\\insc 571 wi22\\assignments\\A03") # example directory path
-# df <- read.csv("experiment_02.csv")
+# encode nominal and ordinal factors (numeric variables are set by default)
+df$Subject <- factor(df$Subject)
+df$Engine <- factor(df$Engine)
+df$Device <- factor(df$Device)
+df$Satisfaction <- ordered(df$Satisfaction)
+df$logMinutes <- log(df$Minutes) # re-create the logMinutes response
 
-# # encode nominal and ordinal factors (numeric variables are set by default)
-# df$Subject <- factor(df$Subject)
-# df$Engine <- factor(df$Engine)
-# df$Device <- factor(df$Device)
-# df$Satisfaction <- ordered(df$Satisfaction)
-# df$logMinutes <- log(df$Minutes) # re-create the logMinutes response
-
-# # encode sum-to-zero factor contrasts
-# contrasts(df$Engine) <- "contr.sum"
-# contrasts(df$Device) <- "contr.sum"
+# encode sum-to-zero factor contrasts
+contrasts(df$Engine) <- "contr.sum"
+contrasts(df$Device) <- "contr.sum"
 
 
 
 
 ####
-# Step 10. Now examine the experiment_02.csv data table. (Note that the Subject, Engine, Minutes,
-#          and logMinutes columns are unchanged from experiment_01.csv.) Write a precise description
-#          conveying what you think this study was about. Be specific!
+# Step 10. Now examine the experiment_02.csv data table.
+# (Note that the Subject, Engine, Minutes, and logMinutes
+# columns are unchanged from experiment_01.csv.)
+# Write a precise description conveying what you think this
+# study was about. Be specific!
 
+# within subjects
+# engine is within subjects factor (google bing yahoo)
+# device is between subjects factor (mobile desktop)
+# response minutes
+# response satisfaction
+# still have 18 subjects (each testing on each device)
+# 9 subjects with each device
 
+# The results stored in experiment_02.csv detail a study that measured
+# how long it took participants to complete a search task in minutes
+# using different search engines on a single device
+# (with different subjects randomly provided a
+# different device, either mobile or desktop).
+# Additionally, the experiment measured each participant's
+# satisfaction with their experience with each search engine.
+
+# In this case, search engine was a within-subjects factor
+# (with levels: Google, Yahoo, and Bing),
+# while device was a between-subjects factor (with levels: mobile and desktop).
+
+# Each participant was tested on each search engine, while each device
+# was tested by 9 participants each.
 
 
 ####
-# Step 11. Conduct exploratory data analysis (EDA) using (a) descriptive statistics and (b) plots.
-#          (Hint: At a minimum, for descriptive statistics, include measures of central tendency
-#          and variation for each of the six Engine × Device combinations. For plots, create boxplots
-#          of Engine, Device, and Engine × Device for both logMinutes and Satisfaction. Use boxplot()
-#          to do so. Since Satisfaction is ordinal, you will need to wrap it in as.numeric() when
-#          plotting. Also, create two interaction plots using with(df, interaction.plot(...)), one
-#          for logMinutes and and one for Satisfaction.)
+# Step 11. Conduct exploratory data analysis (EDA) using (a)
+# descriptive statistics and (b) plots. (Hint: At a minimum,
+# for descriptive statistics, include measures of central tendency
+# and variation for each of the six Engine × Device combinations.
+# For plots, create boxplots of Engine, Device, and
+# Engine × Device for both logMinutes and Satisfaction.
+# Use boxplot() to do so. Since Satisfaction is ordinal,
+# you will need to wrap it in as.numeric() when plotting.
+# Also, create two interaction plots using
+# with(df, interaction.plot(...)), one for logMinutes and and
+# one for Satisfaction.)
 
 
 
