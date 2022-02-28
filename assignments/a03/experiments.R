@@ -68,6 +68,8 @@ contrasts(df$Order) <- "contr.sum"
 # descriptive statistics and (b) plots.
 #         (Hint: At a minimum, explore central tendency and
 #         variation numerically and graphically.)
+# TODO:
+# Make interaction plot between engine and order with value of minutes
 hist(df$Minutes)
 print(mean(df$Minutes))
 print(sd(df$Minutes))
@@ -215,42 +217,50 @@ print(ks.test(bing$Minutes, "pgamma", shape = fBing[1], rate = fBing[2]))
 
 
 ####
-# Step 6. Proceeding with whichever response you settled upon in Step 5, conduct an appropriate
-#         omnibus parametric test to rule out any order effects. (Hint: Before doing so, you should
-#         test for normality and sphericity for Order as your I.V.) Beneath your code, formally report
-#         the results of this step using comments.
+# Step 6. Proceeding with whichever response you settled upon in Step 5,
+# conduct an appropriate omnibus parametric test to rule out any order
+# effects.
+# (Hint: Before doing so, you should test for normality and sphericity
+# for Order as your I.V.) Beneath your code, formally report the results
+# of this step using comments.
 
 
 
 
 ####
-# Step 7. Conduct an appropriate omnibus parametric test for your factor of interest. (Hint: You
-#         tested conditional normality for each level of Engine in Step 5, but you still need to
-#         test for sphericity. Do that, and then test for the Engine main effect.) Beneath your
-#         code, formally report the results of this step using comments.
+# Step 7. Conduct an appropriate omnibus parametric test for your factor
+# of interest. (Hint: You tested conditional normality for each level
+# of Engine in Step 5, but you still need to test for sphericity.
+# Do that, and then test for the Engine main effect.) Beneath your
+# code, formally report the results of this step using comments.
 
 
 
 
 ####
-# Step 8. Conduct an analogous omnibus nonparametric test on your factor of interest. Beneath
-#         your code, formally report the results of this step using comments.
+# Step 8. Conduct an analogous omnibus nonparametric test on your
+# factor of interest. Beneath your code, formally report the results
+# of this step using comments.
 
 
 
 
 ####
-# Step 9. In Steps 7 and 8, you had a chance to discover whether Engine had a significant effect
-#         on search time. But in neither step did you discover which search engine(s) differed
-#         significantly from which other(s). For neither, one of, or both of Steps 7 and 8 in which
-#         a statistically significant main effect of Engine was found, conduct post hoc pairwise
-#         comparisons among levels of Engine, adjusted with Holm’s sequential Bonferroni procedure.
-#         Beneath your code, formally report the results of this step using comments. (Hint: If
-#         Step 7 was statistically significant, use three paired-samples t-tests for your post hoc
-#         pairwise comparisons. If Step 8 was statistically significant, use three Wilcoxon
-#         signed-rank tests for your post hoc pairwise comparisons. Don’t forget to correct the
-#         p-values for multiple comparisons using Holm’s sequential Bonferroni procedure.) Finally,
-#         describe how your findings compare to the predictions you made in Step 3.
+# Step 9. In Steps 7 and 8, you had a chance to discover whether
+# Engine had a significant effect on search time. But in neither
+# step did you discover which search engine(s) differed significantly
+# from which other(s). For neither, one of, or both of
+# Steps 7 and 8 in which a statistically significant main effect of
+# Engine was found, conduct post hoc pairwise comparisons among levels
+# of Engine, adjusted with Holm’s sequential Bonferroni procedure.
+# Beneath your code, formally report the results of this step using
+# comments. (Hint: If Step 7 was statistically significant, use three
+# paired-samples t-tests for your post hoc pairwise comparisons.
+# If Step 8 was statistically significant, use three Wilcoxon
+# signed-rank tests for your post hoc pairwise comparisons. Don’t
+# forget to correct the p-values for multiple comparisons using
+# Holm’s sequential Bonferroni procedure.) Finally, describe how your
+# findings compare to the predictions you made in Step 3.
 
 
 
@@ -281,14 +291,6 @@ contrasts(df$Device) <- "contr.sum"
 # Write a precise description conveying what you think this
 # study was about. Be specific!
 
-# within subjects
-# engine is within subjects factor (google bing yahoo)
-# device is between subjects factor (mobile desktop)
-# response minutes
-# response satisfaction
-# still have 18 subjects (each testing on each device)
-# 9 subjects with each device
-
 # The results stored in experiment_02.csv detail a study that measured
 # how long it took participants to complete a search task in minutes
 # using different search engines on a single device
@@ -296,11 +298,11 @@ contrasts(df$Device) <- "contr.sum"
 # different device, either mobile or desktop).
 # Additionally, the experiment measured each participant's
 # satisfaction with their experience with each search engine.
-
+#
 # In this case, search engine was a within-subjects factor
 # (with levels: Google, Yahoo, and Bing),
 # while device was a between-subjects factor (with levels: mobile and desktop).
-
+#
 # Each participant was tested on each search engine, while each device
 # was tested by 9 participants each.
 
@@ -318,19 +320,101 @@ contrasts(df$Device) <- "contr.sum"
 # with(df, interaction.plot(...)), one for logMinutes and and
 # one for Satisfaction.)
 
+# stats for logMinutes and Satisfaction
+# plots for the various engine, device, and engine by device
+#       for both logMinutes and Satisfaction
+# interaction plot between logMinutes and Satisfaction
 
+hist(df$logMinutes)
+print(mean(df$logMinutes))
+print(sd(df$logMinutes))
+
+hist(as.numeric(df$Satisfaction))
+print(mean(as.numeric(df$Satisfaction)))
+print(sd(as.numeric(df$Satisfaction)))
+
+print(
+    ddply(
+        df,
+        ~ Engine * Device,
+        summarize,
+        logMinutes.mean = round(mean(logMinutes), 2),
+        logMinutes.sd = round(sd(logMinutes), 2),
+        Satisfaction.mean = round(mean(as.numeric(Satisfaction)), 2),
+        Satisfaction.sd = round(sd(as.numeric(Satisfaction)), 2)
+    )
+)
+
+# Boxplot of table for logMinutes
+boxplot(logMinutes ~ Engine * Device, df)
+
+# Boxplot of table for Satisfaction
+boxplot(as.numeric(Satisfaction) ~ Engine * Device, df)
+
+library(ggplot2)
+ggplot(df, aes(Engine, logMinutes)) +
+    geom_boxplot(aes(fill = Device))
+
+## Looking at the overall mean and standard deviation for the whole dataset
+## we see that on average, regardless of search engine, participants
+## completed the task in 22.38 minutes with a standard deviation of
+## 15.22 minutes. However, we notice from our histogram that it seems our
+## distribution is right-skewed or gamma distributed which makes sense
+## because it is very common for datasets that measure response times or
+## completion times to be gamma distributed.
+
+# plot(logMinutes ~ Engine, data = df)
+# print(
+#     ddply(
+#         df,
+#         ~Engine,
+#         summarise,
+#         logMinutes.mean = round(mean(logMinutes), 2),
+#         logMinutes.sd = round(sd(logMinutes), 2)
+#     )
+# )
+# plot(logMinutes ~ Engine, data)
+
+## Looking at how long each subject took to complete the task
+## in minutes by each search engine, we see that Google has a much lower
+## mean and third quartile values than the other two search engines.
+## Yahoo has the next lowest mean but it appears to have a similar distribution
+## to Bing.
+##
+## The standard deviation for the time it took to complete the task using
+## Google is much lower than the standard deviation for the time it took
+## to complete the task using Yahoo or Bing - the standard
+## deviation for Google is less than half what it is for Yahoo or Bing.
+##
+## Not only is the mean less for Google but it's standard deviation is also
+## much less as well. This seems to indicate that Google may result in a
+## significant difference in the time it takes to complete the task.
+
+# plot(Minutes ~ Device, data = df)
+# print(
+#     ddply(
+#         df,
+#         ~Device,
+#         summarise,
+#         Minutes.mean = round(mean(Minutes), 2),
+#         Minutes.sd = round(sd(Minutes), 2)
+#     )
+# )
 
 
 ####
-# Step 12. Based on your EDA, report what you think will be your results from tests for main effects
-#          and interactions for logMinutes and Satisfaction. (You do not need to make predictions
-#          about any post hoc pairwise comparisons. Do not revise your predictions after moving past
-#          this step. The correctness of your predictions is not being graded, only their completeness
-#          and articulation.) (Hint: Remember to make predictions about significant differences for
-#          both D.V.s, logMinutes and Satisfaction, and to do so for an Engine main effect, Device
-#          main effect, and Engine × Device interaction. So, you should have six predictions in all,
-#          although your "prediction" for Engine concerning search time should not be a "prediction"
-#          at all, given your analysis of experiment_01.csv.)
+# Step 12. Based on your EDA, report what you think will be your results
+# from tests for main effects and interactions for logMinutes and
+# Satisfaction. (You do not need to make predictions about any post hoc
+# pairwise comparisons. Do not revise your predictions after moving past
+# this step. The correctness of your predictions is not being graded,
+# only their completeness and articulation.) (Hint: Remember to make
+# predictions about significant differences for both D.V.s, logMinutes
+# and Satisfaction, and to do so for an Engine main effect, Device
+# main effect, and Engine × Device interaction. So, you should have six
+# predictions in all, although your "prediction" for Engine concerning
+# search time should not be a "prediction" at all, given your analysis
+# of experiment_01.csv.)
 
 
 
