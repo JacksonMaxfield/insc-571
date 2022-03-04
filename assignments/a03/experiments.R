@@ -78,9 +78,9 @@ print(sd(df$Minutes))
 # we see that on average, regardless of search engine, participants
 # completed the task in 22.38 minutes with a standard deviation of
 # 15.22 minutes. However, we notice from our histogram that it seems our
-# distribution is right-skewed or gamma distributed which makes sense
+# distribution is right-skewed or log-normal distributed which makes sense
 # because it is very common for datasets that measure response times or
-# completion times to be gamma distributed.
+# completion times to be log-normal distributed.
 
 plot(Minutes ~ Engine, data = df)
 print(
@@ -206,14 +206,63 @@ print(m$Mauchly)
 # Beneath your code, formally report the results of this step using comments.
 
 # Create fits for each engine
-fGoogle <- fitdistr(google$Minutes, "gamma")$estimate
-fYahoo <- fitdistr(yahoo$Minutes, "gamma")$estimate
-fBing <- fitdistr(bing$Minutes, "gamma")$estimate
+fGoogle <- fitdistr(google$Minutes, "lognormal")$estimate
+fYahoo <- fitdistr(yahoo$Minutes, "lognormal")$estimate
+fBing <- fitdistr(bing$Minutes, "lognormal")$estimate
 
 # Run all tests
-print(ks.test(google$Minutes, "pgamma", shape = fGoogle[1], rate = fGoogle[2]))
-print(ks.test(yahoo$Minutes, "pgamma", shape = fYahoo[1], rate = fYahoo[2]))
-print(ks.test(bing$Minutes, "pgamma", shape = fBing[1], rate = fBing[2]))
+print(
+    ks.test(
+        google$Minutes,
+        "plnorm",
+        meanlog = fGoogle[1],
+        sdlog = fGoogle[2],
+        exact = TRUE
+    )
+)
+print(
+    ks.test(
+        yahoo$Minutes,
+        "plnorm",
+        meanlog = fYahoo[1],
+        sdlog = fYahoo[2],
+        exact = TRUE
+    )
+)
+print(
+    ks.test(
+        bing$Minutes,
+        "plnorm",
+        meanlog = fBing[1],
+        sdlog = fBing[2],
+        exact = TRUE
+    )
+)
+
+# The tests for all levels of `Search Engine` (Google, Yahoo, and Bing)
+# were statistically non-significant
+# (Google: D = .117, p = .941, Yahoo: D = .098, p = .989, Bing: D = .132, p = .869),
+# indicating non-detectable deviations from log normal distributions.
+
+# Transforming the `Minutes` response into `logMinutes`:
+df$logMinutes <- log(df$Minutes)
+
+# Reconstruct the data subsets
+google <- df[df$Engine == "Google", ]
+yahoo <- df[df$Engine == "Yahoo", ]
+bing <- df[df$Engine == "Bing", ]
+
+# Shapiro-Wilk for normality
+print(shapiro.test(google$logMinutes))
+print(shapiro.test(yahoo$logMinutes))
+print(shapiro.test(bing$logMinutes))
+
+# google: W = 0.9647, p-value = 0.6941 (normal)
+# yahoo: W = 0.96827, p-value = 0.7646 (normal)
+# bing: W = 0.94563, p-value = 0.3606 (normal)
+
+# After transform, the logMinutes distribution for all levels of
+# search engine, is normal.
 
 
 ####
@@ -224,6 +273,63 @@ print(ks.test(bing$Minutes, "pgamma", shape = fBing[1], rate = fBing[2]))
 # for Order as your I.V.) Beneath your code, formally report the results
 # of this step using comments.
 
+# Create order subsets
+orderOne <- df[df$Order == 1, ]
+orderTwo <- df[df$Order == 2, ]
+orderThree <- df[df$Order == 3, ]
+
+# Shapiro-Wilk for normality
+print(shapiro.test(orderOne$logMinutes))
+print(shapiro.test(orderTwo$logMinutes))
+print(shapiro.test(orderThree$logMinutes))
+
+# Mauchly sphericity violation test
+m <- ezANOVA(
+    data = df,
+    dv = logMinutes,
+    within = c(Order),
+    wid = Subject,
+    type = 3
+)
+print(m$Mauchly)
+
+wideFormatDf <- dcast(df, Subject ~ Order, value.var = "logMinutes")
+orderOneOrderTwo <- t.test(wideFormatDf$"1", wideFormatDf$"2", paired = TRUE)
+orderOneOrderThree <- t.test(wideFormatDf$"1", wideFormatDf$"3", paired = TRUE)
+orderTwoOrderThree <- t.test(wideFormatDf$"2", wideFormatDf$"3", paired = TRUE)
+
+# Adjust all
+print(
+    p.adjust(
+        c(
+            orderOneOrderTwo$p.value,
+            orderOneOrderThree$p.value,
+            orderTwoOrderThree$p.value
+        ),
+        method = "holm"
+    )
+)
+
+# 0.1949631 0.7017587 0.4485689
+# No statistically significant affect of order
+
+# We tested each level of the "Order" factor (1, 2, 3) for
+# violations of normality using Shapiro-Wilk tests. No level or Order
+# shows statistically significant deviation from normality
+# (One: W = .936, p = .361; Two: W = .944, p = .251, Three: W = .961, p = .619).
+#
+# We further, evaluated the "Order" factor for violations of sphericity.
+# Our test was not statistically significant for the within-subjects
+# factor, which indicates no sphericity violation
+# (W = 0.948, p = .654).
+#
+# Finally, we conducted a one-way repeated measures ANOVA against Order
+# to test for statistically significant deviations between the
+# different pairs of levels. All pairs of levels
+# (1 and 2, 1 and 3, and 2 and 3), were found to be not statistically
+# significantly different from one another
+# (Orders 1 and 2: n.s, Orders 1 and 3: n.s., Orders 2 and 3: n.s.).
+
 
 
 
@@ -233,6 +339,53 @@ print(ks.test(bing$Minutes, "pgamma", shape = fBing[1], rate = fBing[2]))
 # of Engine in Step 5, but you still need to test for sphericity.
 # Do that, and then test for the Engine main effect.) Beneath your
 # code, formally report the results of this step using comments.
+
+# Mauchly sphericity violation test
+m <- ezANOVA(
+    data = df,
+    dv = logMinutes,
+    within = c(Engine),
+    wid = Subject,
+    type = 3
+)
+print(m$Mauchly)
+
+#   Effect         W         p p<.05
+# 2 Engine 0.9945278 0.9570519
+
+wideFormatDf <- dcast(df, Subject ~ Engine, value.var = "logMinutes")
+googleYahoo <- t.test(wideFormatDf$Google, wideFormatDf$Yahoo, paired = TRUE)
+googleBing <- t.test(wideFormatDf$Google, wideFormatDf$Bing, paired = TRUE)
+yahooBing <- t.test(wideFormatDf$Yahoo, wideFormatDf$Bing, paired = TRUE)
+
+# Adjust all
+print(
+    p.adjust(
+        c(
+            googleYahoo$p.value,
+            googleBing$p.value,
+            yahooBing$p.value
+        ),
+        method = "holm"
+    )
+)
+
+# [1] 0.0071881866 0.0007386976 0.2660674077
+# google yahoo = sig, google bin = sig, yahoo bing = non sig
+
+# We evaluated the "Engine" factor for violations of sphericity.
+# Our test was not statistically significant for the within-subjects
+# factor, which indicates no sphericity violation
+# (W = 0.995, p = .957).
+#
+# We additionally conducted a one-way repeated measures ANOVA against
+# the Engine factor to test for statistically significant deviations
+# between the different pairs of levels.
+# We found a statistically significant difference between the
+# Google and Yahoo levels (p < .01) and
+# for the Google and Bing levels (p < .001) but did not find a
+# statistically significant difference between the Yahoo and Bing
+# levels (n.s.).
 
 
 
@@ -359,9 +512,9 @@ ggplot(df, aes(Engine, logMinutes)) +
 ## we see that on average, regardless of search engine, participants
 ## completed the task in 22.38 minutes with a standard deviation of
 ## 15.22 minutes. However, we notice from our histogram that it seems our
-## distribution is right-skewed or gamma distributed which makes sense
+## distribution is right-skewed or log-normal distributed which makes sense
 ## because it is very common for datasets that measure response times or
-## completion times to be gamma distributed.
+## completion times to be log-normal distributed.
 
 # plot(logMinutes ~ Engine, data = df)
 # print(
