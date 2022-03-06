@@ -68,8 +68,8 @@ contrasts(df$Order) <- "contr.sum"
 # descriptive statistics and (b) plots.
 #         (Hint: At a minimum, explore central tendency and
 #         variation numerically and graphically.)
-# TODO:
-# Make interaction plot between engine and order with value of minutes
+print("Step 2")
+
 hist(df$Minutes)
 print(mean(df$Minutes))
 print(sd(df$Minutes))
@@ -124,6 +124,8 @@ print(
 # given that there seems to be similar distributions
 # (and means and standard deviations) for each order.
 
+print("----------------------------------------------------------------------")
+
 
 
 
@@ -158,6 +160,7 @@ print(
 # for a single normality test is shown below:
 # A Shapiro-Wilk test of normality shows no violation for
 # Bing (W=.960, p=.608).
+print("Step 4")
 
 # Construct subsets by search engine
 google <- df[df$Engine == "Google", ]
@@ -168,7 +171,6 @@ bing <- df[df$Engine == "Bing", ]
 print(shapiro.test(google$Minutes))
 print(shapiro.test(yahoo$Minutes))
 print(shapiro.test(bing$Minutes))
-
 # google: W = 0.89608, p-value = 0.04911 (not-normal)
 # yahoo: W = 0.8779, p-value = 0.02407 (not-normal)
 # bing: W = 0.96032, p-value = 0.6078 (normal)
@@ -182,19 +184,20 @@ m <- ezANOVA(
     type = 3
 )
 print(m$Mauchly)
-
 # Mauchly sphericity: W = 0.978147, p-value = 0.8379789 (no violation)
 
 # We tested each level of the "Engine" factor (Google, Yahoo, Bing) for
 # violations of normality using Shapiro-Wilk tests. Google and Yahoo
 # show statistically significant deviations from normality
-# (Google: W=.896, p<.05; Yahoo: W=0.878, p<.05).
+# (Google: W=.896, p<.05; Yahoo: W=.878, p<.05).
 # However, Bing showed no statistically significant deviation from normality
 # (W=.960, p=.608).
 #
-# We further, evaluated the "Engine" factor for violations of sphericity.
-# Our test was not statistically significant for the within-subjects
-# factor, which indicates no sphericity violation.
+# We further, evaluated the within-subjects "Engine" factor with Mauchly's
+# test of sphericity. Our test found no violation of sphericity
+# (W=.978, p=.838).
+
+print("----------------------------------------------------------------------")
 
 
 
@@ -204,6 +207,7 @@ print(m$Mauchly)
 # Determine statistically whether you should transform your response.
 # If so, transform it and then retest its normality.
 # Beneath your code, formally report the results of this step using comments.
+print("Step 5")
 
 # Create fits for each engine
 fGoogle <- fitdistr(google$Minutes, "lognormal")$estimate
@@ -238,11 +242,10 @@ print(
         exact = TRUE
     )
 )
-
-# The tests for all levels of `Search Engine` (Google, Yahoo, and Bing)
-# were statistically non-significant
-# (Google: D = .117, p = .941, Yahoo: D = .098, p = .989, Bing: D = .132, p = .869),
-# indicating non-detectable deviations from log normal distributions.
+# Google: D = 0.11737, p-value = 0.9408
+# Yahoo: D = 0.097717, p-value = 0.9886
+# Bing: D = 0.13272, p-value = 0.8687
+# All levels non-significant
 
 # Transforming the `Minutes` response into `logMinutes`:
 df$logMinutes <- log(df$Minutes)
@@ -256,13 +259,24 @@ bing <- df[df$Engine == "Bing", ]
 print(shapiro.test(google$logMinutes))
 print(shapiro.test(yahoo$logMinutes))
 print(shapiro.test(bing$logMinutes))
-
 # google: W = 0.9647, p-value = 0.6941 (normal)
 # yahoo: W = 0.96827, p-value = 0.7646 (normal)
 # bing: W = 0.94563, p-value = 0.3606 (normal)
 
-# After transform, the logMinutes distribution for all levels of
-# search engine, is normal.
+# To test if each level of the Engine factor's Minutes continuous response
+# was log-normal, a Kolmogorov-Smirnov was run on all levels of the Engine
+# factor. All factors were found to be statistically non-significant
+# indicating non-detectable deviations from log-normal distributions.
+#
+# After applying a log transform to the continuous Minutes response to the
+# data and running Shapiro-Wilk tests for normality on all levels of the
+# Engine factor with the new logMinutes, we found that all levels
+# were non-significant indicating compliance with the normality assumption
+# (Google: W=.965, p=.694, Yahoo: W=.968, p=.765, Bing: W=.946, p=.361).
+
+print("----------------------------------------------------------------------")
+
+
 
 
 ####
@@ -272,6 +286,7 @@ print(shapiro.test(bing$logMinutes))
 # (Hint: Before doing so, you should test for normality and sphericity
 # for Order as your I.V.) Beneath your code, formally report the results
 # of this step using comments.
+print("Step 6")
 
 # Create order subsets
 orderOne <- df[df$Order == 1, ]
@@ -282,6 +297,9 @@ orderThree <- df[df$Order == 3, ]
 print(shapiro.test(orderOne$logMinutes))
 print(shapiro.test(orderTwo$logMinutes))
 print(shapiro.test(orderThree$logMinutes))
+# orderOne: W = 0.9364, p-value = 0.2512
+# orderTwo: W = 0.94372, p-value = 0.3351
+# orderThree: W = 0.96091, p-value = 0.6192
 
 # Mauchly sphericity violation test
 m <- ezANOVA(
@@ -292,43 +310,29 @@ m <- ezANOVA(
     type = 3
 )
 print(m$Mauchly)
+# Order: W=0.948256 p=0.6537397 (no violation)
+# Run ANOVA
 
-wideFormatDf <- dcast(df, Subject ~ Order, value.var = "logMinutes")
-orderOneOrderTwo <- t.test(wideFormatDf$"1", wideFormatDf$"2", paired = TRUE)
-orderOneOrderThree <- t.test(wideFormatDf$"1", wideFormatDf$"3", paired = TRUE)
-orderTwoOrderThree <- t.test(wideFormatDf$"2", wideFormatDf$"3", paired = TRUE)
-
-# Adjust all
-print(
-    p.adjust(
-        c(
-            orderOneOrderTwo$p.value,
-            orderOneOrderThree$p.value,
-            orderTwoOrderThree$p.value
-        ),
-        method = "holm"
-    )
-)
-
-# 0.1949631 0.7017587 0.4485689
-# No statistically significant affect of order
+print(m$ANOVA)
+#   Effect DFn DFd        F         p p<.05        ges
+# 2  Order   2  34 1.642182 0.2085388       0.05839094
 
 # We tested each level of the "Order" factor (1, 2, 3) for
-# violations of normality using Shapiro-Wilk tests. No level or Order
+# violations of normality using Shapiro-Wilk tests. No level of Order
 # shows statistically significant deviation from normality
-# (One: W = .936, p = .361; Two: W = .944, p = .251, Three: W = .961, p = .619).
+# (One: W=.936, p =.251; Two: W=.944, p=.335, Three: W=.961, p=.619).
 #
 # We further, evaluated the "Order" factor for violations of sphericity.
 # Our test was not statistically significant for the within-subjects
-# factor, which indicates no sphericity violation
-# (W = 0.948, p = .654).
+# factor, indicating no violations of sphericity (W=.948, p=.654).
 #
-# Finally, we conducted a one-way repeated measures ANOVA against Order
-# to test for statistically significant deviations between the
-# different pairs of levels. All pairs of levels
-# (1 and 2, 1 and 3, and 2 and 3), were found to be not statistically
-# significantly different from one another
-# (Orders 1 and 2: n.s, Orders 1 and 3: n.s., Orders 2 and 3: n.s.).
+# Because we found no sphericity violation,
+# we conducted a one-way repeated measures ANOVA against Order
+# to test for statistically significant differences between the levels.
+# Our one-way repeated measures ANOVA showed no statistically significant
+# differences (F(2, 34) = 1.642, n.s.).
+
+print("----------------------------------------------------------------------")
 
 
 
@@ -339,6 +343,7 @@ print(
 # of Engine in Step 5, but you still need to test for sphericity.
 # Do that, and then test for the Engine main effect.) Beneath your
 # code, formally report the results of this step using comments.
+print("Step 7")
 
 # Mauchly sphericity violation test
 m <- ezANOVA(
@@ -349,43 +354,22 @@ m <- ezANOVA(
     type = 3
 )
 print(m$Mauchly)
-
 #   Effect         W         p p<.05
 # 2 Engine 0.9945278 0.9570519
 
-wideFormatDf <- dcast(df, Subject ~ Engine, value.var = "logMinutes")
-googleYahoo <- t.test(wideFormatDf$Google, wideFormatDf$Yahoo, paired = TRUE)
-googleBing <- t.test(wideFormatDf$Google, wideFormatDf$Bing, paired = TRUE)
-yahooBing <- t.test(wideFormatDf$Yahoo, wideFormatDf$Bing, paired = TRUE)
+# No sphericity violation, simply use ANOVA
+print(m$ANOVA)
+#   Effect DFn DFd        F            p p<.05       ges
+# 2 Engine   2  34 11.52435 0.0001509957     * 0.2678067
 
-# Adjust all
-print(
-    p.adjust(
-        c(
-            googleYahoo$p.value,
-            googleBing$p.value,
-            yahooBing$p.value
-        ),
-        method = "holm"
-    )
-)
 
-# [1] 0.0071881866 0.0007386976 0.2660674077
-# google yahoo = sig, google bin = sig, yahoo bing = non sig
+# Looking at the main effect of Engine on the logMinutes response,
+# Mauchly's test of sphericity indicated no sphericity violation
+# (W=.995, p=.957), allowing for an uncorrected repeated measures ANOVA,
+# which, showed statistically significant differences between the levels
+# of Engine (F(2, 34) = 11.524, p<.0005).
 
-# We evaluated the "Engine" factor for violations of sphericity.
-# Our test was not statistically significant for the within-subjects
-# factor, which indicates no sphericity violation
-# (W = 0.995, p = .957).
-#
-# We additionally conducted a one-way repeated measures ANOVA against
-# the Engine factor to test for statistically significant deviations
-# between the different pairs of levels.
-# We found a statistically significant difference between the
-# Google and Yahoo levels (p < .01) and
-# for the Google and Bing levels (p < .001) but did not find a
-# statistically significant difference between the Yahoo and Bing
-# levels (n.s.).
+print("----------------------------------------------------------------------")
 
 
 
@@ -394,6 +378,22 @@ print(
 # Step 8. Conduct an analogous omnibus nonparametric test on your
 # factor of interest. Beneath your code, formally report the results
 # of this step using comments.
+print("Step 8")
+
+print(
+    friedman_test(
+        logMinutes ~ Engine | Subject,
+        data = df,
+        distribution = "asymptotic"
+    )
+)
+# chi-squared = 8.4444, df = 2, p-value = 0.01467
+
+
+# A Friedman test found that the differences between levels of Engine were
+# statistically significant (χ2(2, N=54) = 8.44, p<.05))
+
+print("----------------------------------------------------------------------")
 
 
 
@@ -414,6 +414,49 @@ print(
 # forget to correct the p-values for multiple comparisons using
 # Holm’s sequential Bonferroni procedure.) Finally, describe how your
 # findings compare to the predictions you made in Step 3.
+print("Step 9")
+
+# Make wide format table
+wideFormatDf <- dcast(df, Subject ~ Engine, value.var = "logMinutes")
+
+# Parametric paired sample t-tests
+googleYahoo <- t.test(wideFormatDf$Google, wideFormatDf$Yahoo, paired = TRUE)
+googleBing <- t.test(wideFormatDf$Google, wideFormatDf$Bing, paired = TRUE)
+yahooBing <- t.test(wideFormatDf$Yahoo, wideFormatDf$Bing, paired = TRUE)
+print(googleYahoo)
+print(googleBing)
+print(yahooBing)
+
+# Adjust all
+print(
+    p.adjust(
+        c(
+            googleYahoo$p.value,
+            googleBing$p.value,
+            yahooBing$p.value
+        ),
+        method = "holm"
+    )
+)
+# [1] 0.0071881866 0.0007386976 0.2660674077
+
+# Three post hoc paired-samples t-tests, corrected with Holm’s sequential Bonferroni procedure, indicated that ‘a’ and
+# ‘b’ (t(19) = 3.14, p < .05) and ‘a’ and ‘c’ (t(19) = 3.39, p < .01) were statistically significantly different, but that ‘b’ and
+# ‘c’ were not (t(19) = 0.65, n.s.).
+
+# We conducted post-hoc paired-samples t-tests, corrected with Holm's
+# sequential Bonferroni procedure, for all pairs of the Engine factor
+# to test for statistically significant deviations between the
+# different pairs of levels.
+#
+# We found a statistically significant difference between
+# Google and Yahoo (t(17) = 3.375, p<.01) and Google and Bing
+# (t(17) = 4.617, p <.001) but did not find a statistically
+# significant difference between Yahoo and Bing (t(17) = 1.15, n.s.).
+#
+# These post-hoc results match our prediction from step 3.
+
+print("----------------------------------------------------------------------")
 
 
 
