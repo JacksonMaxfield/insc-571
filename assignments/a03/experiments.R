@@ -20,6 +20,7 @@ library(ARTool)
 library(dplyr)
 library(ordinal)
 library(RVAideMemoire)
+library(ggplot2)
 
 ####
 ## EXPERIMENT 01 SETUP ##
@@ -440,10 +441,6 @@ print(
 )
 # [1] 0.0071881866 0.0007386976 0.2660674077
 
-# Three post hoc paired-samples t-tests, corrected with Holm’s sequential Bonferroni procedure, indicated that ‘a’ and
-# ‘b’ (t(19) = 3.14, p < .05) and ‘a’ and ‘c’ (t(19) = 3.39, p < .01) were statistically significantly different, but that ‘b’ and
-# ‘c’ were not (t(19) = 0.65, n.s.).
-
 # We conducted post-hoc paired-samples t-tests, corrected with Holm's
 # sequential Bonferroni procedure, for all pairs of the Engine factor
 # to test for statistically significant deviations between the
@@ -515,11 +512,7 @@ contrasts(df$Device) <- "contr.sum"
 # Also, create two interaction plots using
 # with(df, interaction.plot(...)), one for logMinutes and and
 # one for Satisfaction.)
-
-# stats for logMinutes and Satisfaction
-# plots for the various engine, device, and engine by device
-#       for both logMinutes and Satisfaction
-# interaction plot between logMinutes and Satisfaction
+print("Step 11")
 
 hist(df$logMinutes)
 print(mean(df$logMinutes))
@@ -541,15 +534,35 @@ print(
     )
 )
 
-# Boxplot of table for logMinutes
-boxplot(logMinutes ~ Engine * Device, df)
+# Plot boxplot by engine (logMinutes)
+ggplot(df, aes(x = Engine, y = logMinutes)) +
+    geom_boxplot()
 
-# Boxplot of table for Satisfaction
-boxplot(as.numeric(Satisfaction) ~ Engine * Device, df)
+# Plot boxplot by device (logMinutes)
+ggplot(df, aes(x = Device, y = logMinutes)) +
+    geom_boxplot()
 
-library(ggplot2)
-ggplot(df, aes(Engine, logMinutes)) +
-    geom_boxplot(aes(fill = Device))
+# Plot boxplot by engine (satisfaction)
+ggplot(df, aes(x = Engine, y = as.numeric(Satisfaction))) +
+    geom_boxplot()
+
+# Plot boxplot by device (satisfaction)
+ggplot(df, aes(x = Device, y = as.numeric(Satisfaction))) +
+    geom_boxplot()
+
+# Plot boxplot by engine x device (logMinutes)
+ggplot(df, aes(x = Engine, y = logMinutes, fill = Device)) +
+    geom_boxplot()
+
+# Plot boxplot by engine x device (satisfaction)
+ggplot(df, aes(x = Engine, y = as.numeric(Satisfaction), fill = Device)) +
+    geom_boxplot()
+
+# Interaction plot for logMinutes
+with(df, interaction.plot(Engine, Device, logMinutes))
+
+# Interaction plot for satisfaction
+with(df, interaction.plot(Engine, Device, as.numeric(Satisfaction)))
 
 ## Looking at the overall mean and standard deviation for the whole dataset
 ## we see that on average, regardless of search engine, participants
@@ -559,17 +572,6 @@ ggplot(df, aes(Engine, logMinutes)) +
 ## because it is very common for datasets that measure response times or
 ## completion times to be log-normal distributed.
 
-# plot(logMinutes ~ Engine, data = df)
-# print(
-#     ddply(
-#         df,
-#         ~Engine,
-#         summarise,
-#         logMinutes.mean = round(mean(logMinutes), 2),
-#         logMinutes.sd = round(sd(logMinutes), 2)
-#     )
-# )
-# plot(logMinutes ~ Engine, data)
 
 ## Looking at how long each subject took to complete the task
 ## in minutes by each search engine, we see that Google has a much lower
@@ -586,16 +588,27 @@ ggplot(df, aes(Engine, logMinutes)) +
 ## much less as well. This seems to indicate that Google may result in a
 ## significant difference in the time it takes to complete the task.
 
-# plot(Minutes ~ Device, data = df)
-# print(
-#     ddply(
-#         df,
-#         ~Device,
-#         summarise,
-#         Minutes.mean = round(mean(Minutes), 2),
-#         Minutes.sd = round(sd(Minutes), 2)
-#     )
-# )
+# Looking at the whole dataset, we see that there was a mean logMinutes of
+# 2.869 with a standard deviation of 0.722. The mean of Satisfaction was
+# 4.519 with a standard deviation of 1.657. A table of all combinations
+# of device and search engine can be seen below.
+#
+#   Engine  Device logMinutes.mean logMinutes.sd Satisfaction.mean Satisfaction.sd
+# 1   Bing desktop            2.98          0.63              5.33            1.32
+# 2   Bing  mobile            3.48          0.48              3.22            1.30
+# 3 Google desktop            1.98          0.45              5.78            0.83
+# 4 Google  mobile            2.74          0.51              5.33            1.41
+# 5  Yahoo desktop            2.71          0.52              4.33            1.22
+# 6  Yahoo  mobile            3.33          0.70              3.11            1.76
+#
+# The overall trends seem to show that users on desktop devices complete the
+# search task in less time regardless of search engine. Further,
+# on average users report being more satisfied on desktop devices than on
+# mobile devices across the search engines.
+
+print("----------------------------------------------------------------------")
+
+
 
 
 ####
@@ -612,121 +625,236 @@ ggplot(df, aes(Engine, logMinutes)) +
 # search time should not be a "prediction" at all, given your analysis
 # of experiment_01.csv.)
 
-
-
-
-####
-# Step 13. Ignoring assumption tests or tests for order effects, conduct a two-way fixed-effects mixed
-#          factorial ANOVA of logMinutes by Engine and Device. Beneath your code, formally report the
-#          results of this step using comments. (Hint: USe ezANOVA().)
-
-
-
-
-####
-# Step 14. Repeat the analysis of variance you did in Step 13 but using a linear mixed model (LMM).
-#          (Hint: After using lmer() to build a model m, use Anova(m, type=3, test.statistic="F") to show
-#          the ANOVA table. Ignore singularity warnings when building the model. Also, recall that a p-
-#          value between .05 and .10 is considered a "marginal result" or "trend," and should be reported
-#          to 3-digits.) As before, beneath your code, formally report the results of this step using
-#          comments. Also, indicate whether the statistical conclusions change from the fixed-effects
-#          analysis you did in Step 13.
-
-
-
-
-####
-# Step 15. You have a hypothesis that each search engine's search time, in logMinutes, is significantly
-#          different between their desktop and mobile versions. Conduct three pairwise comparisons to
-#          test this hypothesis and report your results. (Hint: Use glht() on the model you built in
-#          Step 14 to carry out all Engine × Device pairwise comparisons, but do not correct for
-#          multiple comparisons so as to get the raw p-values. Then, hand-select just the three pairwise
-#          comparisons your hypothesis requires, manually correcting their p-values with p.adjust()
-#          using Holm's sequential Bonferroni procedure.)
-
-
-
-
-####
-# Step 16. Rather than using parametric tests on logMinutes, we can use nonparametric tests on the raw
-#          Minutes response, as we did in Step 8. However, typical nonparametric tests such as Wilcoxon
-#          signed-rank, Friedman, Mann-Whitney, and Kruskal-Wallis all only handle a single factor. Since
-#          we have two factors, Engine and Device, we need to use something else. The Aligned Rank
-#          Transform (ART) procedure provides such an option. Use the ART procedure to conduct a
-#          nonparametric analysis of variance on Minutes by Engine and Device. Compare your conclusions
-#          to those you obtained in Step 14. (Hint: The model is similar to the one you built in Step 14,
-#          except the response is Minutes instead of logMinutes. The model-building function is art()
-#          instead of lmer(). And the ANOVA call is anova() instead of Anova().)
-
-
-
-
-####
-# Step 17. Repeat Step 15 but using the ART model you built in Step 16. Report your findings as usual,
-#          and compare the conclusions to those reached in Step 15. (Hint: Use art.con() to perform
-#          the ART-C procedure, which stands for "ART contrasts." Do not correct for multiple
-#          comparisons, but hand-select just the three hypothesized comparisons and manually correct
-#          their p-values using p.adjust().)
-
-
-
-
-####
-# Step 18. Now you will analyze the Satisfaction response, which is a 1-7 Likert scale rating for
-#          search satisfaction. As Satisfaction is an ordinal response, we can analyze it using mixed
-#          ordinal logistic regression, which is a form of generalized linear mixed model (GLMM).
-#          Analyze Satisfaction by Engine and Device. As clmm() is a bit finnicky, most of the code
-#          is given to you below, but you need to fill in the statistical model. As usual, formally
-#          report your results using comments.
+# Completion time of the task in logMinutes will be significantly lower
+# when the user used Google vs Yahoo or Bing (logMinutes will be
+# significantly different for Google vs other levels of Engine). Yahoo
+# and Bing will not be statistically different from each other
+# in logMinutes.
 #
-#            df2 <- as.data.frame(df) # copy the data frame to appease clmm()
-#            m = clmm(...put statistical model here..., data=df2, link="probit")
-#            Anova.clmm(m)
+# Desktop devices will be found to be statistically significantly different
+# for both logMinutes and Satisfaction (desktop devices completed the task
+# faster, lower time; desktop devices were in all cases, preferred over
+# their mobile counterpart).
 
 
 
 
 ####
-# Step 19. You have a hypothesis that satisfaction with each search engine is significantly different
-#          between their desktop and mobile versions. Using your mixed ordinal logistic statistical
-#          model from Step 18, conduct pairwise comparisons to test this hypothesis and report your
-#          results. (Hint: This step is to Satisfaction what Steps 15 and 17 were to logMinutes.) As
-#          models built with clmm() can be a bit finnicky, the first part of the necessary code is
-#          given to you below. (You still need to hand-correct the hypothesized p-values as you did
-#          in Steps 15 and 17.) Be sure to formally report your results below your code.
+# Step 13. Ignoring assumption tests or tests for order effects,
+# conduct a two-way fixed-effects mixed factorial ANOVA of
+# logMinutes by Engine and Device. Beneath your code, formally
+# report the results of this step using comments. (Hint: USe ezANOVA().)
+print("Step 13")
+
+m <- ezANOVA(
+    data = df,
+    dv = logMinutes,
+    within = c(Engine),
+    between = c(Device),
+    wid = Subject,
+    type = 3
+)
+
+print(m$Mauchly)
+print(m$ANOVA)
+
+# Mauchly's test of sphericity was run on mixed factorial ANOVA model with a
+# between-subjects factor Device and a within-subjects factor Engine.
+# The test was statistically non-significant for both the Engine main effect
+# (W=.994, p=.958) and the Device x Engine interaction effect (W=.994, p=.958)
+# indicating no sphericity violations.
 #
-#            summary(as.glht(pairs(emmeans(m, ~ Engine*Device))), test=adjusted(type="none"))
-#            # hand-select and correct hypothesized p-values for Bing, Google, and Yahoo
-
-
-
-
-####
-# Step 20. Repeat Step 18 but now using the Aligned Rank Transform (ART) procedure. As usual,
-#          formally report your statistical findings beneath your code. Also, compare your
-#          statistical conclusions to those from Step 18.
-
-
-
-
-####
-# Step 21. Repeat step 19 but now using the Aligned Rank Transform contrasts (ART-C) procedure.
-#          As usual, formally report your statistical findings beneath your code. Also, compare
-#          your statistical conclusions to those from Step 19.
-
-
-
-
-####
-# Step 22. Stepping back , compare your statistical conclusions from your analysis of
-#          experiment_02.csv with the predictions you made in Step 12. For each main effect or
-#          interaction effect (you should have six in all), indicate whether the various
-#          statistical tests you conducted confirmed or failed to confirm your prediction. (Hint:
-#          As a reminder, you had two main effect predictions and one interaction prediction for
-#          each of the logMinutes and Satisfaction responses. For logMinutes, you performed
-#          analyses with a fixed-effects ANOVA, a linear mixed model (LMM), and the Aligned Rank
-#          Transform (ART) procedure.[1] For Satisfaction, you performed analyses with mixed
-#          ordinal logistic regression (a GLMM) and the Aligned Rank Transform (ART) procedure.)
+# Because there were no sphericity violations found, we can use a repeated
+# measures mixed factorial ANOVA to test for statistical differences in
+# main and interaction effects.
 #
-#          [1] Technically, you performed the ART procedure on Minutes, not logMinutes, but
-#              since the ART is a rank-based procedure, the difference is negligible.
+# We found a statistically significant effect on logMinutes from Device
+# (F(1, 16) = 21.487, p<.0005) and from Engine (F(2, 32) = 10.994, p<.005)
+# but not from the Device x Engine interaction effect
+# (F(2, 32) = 0.217, n.s.).
+
+print("----------------------------------------------------------------------")
+
+
+
+
+####
+# Step 14. Repeat the analysis of variance you did in Step 13 but
+# using a linear mixed model (LMM). (Hint: After using lmer() to
+# build a model m, use Anova(m, type=3, test.statistic="F") to show
+# the ANOVA table. Ignore singularity warnings when building the model.
+# Also, recall that a p-value between .05 and .10 is considered a
+# "marginal result" or "trend," and should be reported to 3-digits.)
+# As before, beneath your code, formally report the results of this step using
+# comments. Also, indicate whether the statistical conclusions change from the
+# fixed-effects analysis you did in Step 13.
+print("Step 14")
+
+m <- lmer(logMinutes ~ Engine * Device + (1 | Subject), data = df)
+print(Anova(m, type = 3, test.statistic = "F"))
+
+# A linear mixed model analysis of variance indicated a statistically
+# significant effect on logMinutes from Engine (F(2, 32) = 12.04, p<.0005)
+# and Device (F(1, 16) = 17.38, p<.0005) but not from the Engine x Device
+# interaction effect (F(2, 32) = 0.238, n.s.)
+
+print("----------------------------------------------------------------------")
+
+
+
+
+####
+# Step 15. You have a hypothesis that each search engine's search time,
+# in logMinutes, is significantly different between their desktop and
+# mobile versions. Conduct three pairwise comparisons to test this
+# hypothesis and report your results. (Hint: Use glht() on the model
+# you built in Step 14 to carry out all Engine × Device pairwise
+# comparisons, but do not correct for multiple comparisons so as to get
+# the raw p-values. Then, hand-select just the three pairwise
+# comparisons your hypothesis requires, manually correcting their p-values
+# with p.adjust() using Holm's sequential Bonferroni procedure.)
+print("Step 15")
+
+print(summary(glht(m, emm(pairwise ~ Engine * Device))))
+# Linear Hypotheses:
+#                                     Estimate Std. Error t value Pr(>|t|)
+# Bing desktop - Google desktop == 0   0.99657    0.26132   3.814  0.00566 **
+# Bing desktop - Yahoo desktop == 0    0.26830    0.26132   1.027  0.90621
+# Bing desktop - Bing mobile == 0     -0.50560    0.26132  -1.935  0.39661
+# Bing desktop - Google mobile == 0    0.23624    0.26132   0.904  0.94326
+# Bing desktop - Yahoo mobile == 0    -0.35279    0.26132  -1.350  0.75559
+# Google desktop - Yahoo desktop == 0 -0.72827    0.26132  -2.787  0.07993 .
+# Google desktop - Bing mobile == 0   -1.50217    0.26132  -5.748  < 0.001 ***
+# Google desktop - Google mobile == 0 -0.76033    0.26132  -2.910  0.06038 .
+# Google desktop - Yahoo mobile == 0  -1.34936    0.26132  -5.164  < 0.001 ***
+# Yahoo desktop - Bing mobile == 0    -0.77390    0.26132  -2.962  0.05330 .
+# Yahoo desktop - Google mobile == 0  -0.03205    0.26132  -0.123  1.00000
+# Yahoo desktop - Yahoo mobile == 0   -0.62109    0.26132  -2.377  0.18831
+# Bing mobile - Google mobile == 0     0.74185    0.26132   2.839  0.07108 .
+# Bing mobile - Yahoo mobile == 0      0.15282    0.26132   0.585  0.99151
+# Google mobile - Yahoo mobile == 0   -0.58903    0.26132  -2.254  0.23631
+
+# TODO:
+# OR (because this naturally breaks out into three levels of engine)
+# But then why not just add the adjust param to the function???
+# print(summary(glht(m, emm(pairwise ~ Engine))))
+
+
+print("----------------------------------------------------------------------")
+
+
+
+####
+# Step 16. Rather than using parametric tests on logMinutes, we can
+# use nonparametric tests on the raw Minutes response, as we did in
+# Step 8. However, typical nonparametric tests such as Wilcoxon signed-rank,
+# Friedman, Mann-Whitney, and Kruskal-Wallis all only handle a single factor.
+# Since we have two factors, Engine and Device, we need to use something else.
+# The Aligned Rank Transform (ART) procedure provides such an option.
+# Use the ART procedure to conduct a nonparametric analysis of variance on
+# Minutes by Engine and Device. Compare your conclusions to those you obtained
+# in Step 14. (Hint: The model is similar to the one you built in Step 14,
+# except the response is Minutes instead of logMinutes. The model-building
+# function is art() instead of lmer(). And the ANOVA call is anova() instead
+# of Anova().)
+print("Step 16")
+
+m <- art(logMinutes ~ Engine * Device + (1 | Subject), data = df)
+print(anova(m))
+
+# A nonparametric analysis of variance based on the Aligned Rank Transform
+# indicated statistically significant effects on logMinutes from Engine
+# (F(2, 32) = 12.146, p<.0005) and Device (F(1, 16) = 16.444, p<.001) but
+# not from the Engine x Device interaction effect (F(2, 32) = 0.297, n.s.).
+#
+# Comparing this to the parametric analysis of variance we conducted in
+# step 14, we see that we are drawing the same statistical difference
+# conclusions for which effects are statistically different.
+# The only difference between the non-parameteric and parametric results
+# are the fact that the tests results in different p-values with the
+# parametric tests having lower p-values than their non-parametric
+# counterparts.
+
+print("----------------------------------------------------------------------")
+
+
+
+
+####
+# Step 17. Repeat Step 15 but using the ART model you built in Step 16.
+# Report your findings as usual, and compare the conclusions to those reached
+# in Step 15. (Hint: Use art.con() to perform the ART-C procedure, which stands
+# for "ART contrasts." Do not correct for multiple comparisons, but hand-select
+# just the three hypothesized comparisons and manually correct their p-values
+# using p.adjust().)
+
+
+
+
+####
+# Step 18. Now you will analyze the Satisfaction response, which is a 1-7
+# Likert scale rating for search satisfaction. As Satisfaction is an ordinal
+# response, we can analyze it using mixed ordinal logistic regression, which is
+# a form of generalized linear mixed model (GLMM). Analyze Satisfaction by
+# Engine and Device. As clmm() is a bit finnicky, most of the code is given
+# to you below, but you need to fill in the statistical model. As usual,
+# formally report your results using comments.
+#
+#   df2 <- as.data.frame(df) # copy the data frame to appease clmm()
+#   m = clmm(...put statistical model here..., data=df2, link="probit")
+#   Anova.clmm(m)
+
+
+
+
+####
+# Step 19. You have a hypothesis that satisfaction with each search engine
+# is significantly different between their desktop and mobile versions.
+# Using your mixed ordinal logistic statistical model from Step 18,
+# conduct pairwise comparisons to test this hypothesis and report your
+# results. (Hint: This step is to Satisfaction what Steps 15 and 17 were
+# to logMinutes.) As models built with clmm() can be a bit finnicky,
+# the first part of the necessary code is given to you below. (You still
+# need to hand-correct the hypothesized p-values as you did in Steps 15 and
+# 17.) Be sure to formally report your results below your code.
+#
+#   summary(as.glht(pairs(emmeans(m, ~ Engine*Device))), test=adjusted(type="none"))
+#   # hand-select and correct hypothesized p-values for Bing, Google, and Yahoo
+
+
+
+
+####
+# Step 20. Repeat Step 18 but now using the Aligned Rank Transform
+# (ART) procedure. As usual, formally report your statistical findings
+# beneath your code. Also, compare your statistical conclusions to those
+# from Step 18.
+
+
+
+
+####
+# Step 21. Repeat step 19 but now using the Aligned Rank Transform
+# contrasts (ART-C) procedure. As usual, formally report your statistical
+# findings beneath your code. Also, compare your statistical conclusions
+# to those from Step 19.
+
+
+
+
+####
+# Step 22. Stepping back , compare your statistical conclusions from your
+# analysis of experiment_02.csv with the predictions you made in Step 12.
+# For each main effect or interaction effect (you should have six in all),
+# indicate whether the various statistical tests you conducted confirmed
+# or failed to confirm your prediction. (Hint: As a reminder, you had two
+# main effect predictions and one interaction prediction for each of the
+# logMinutes and Satisfaction responses. For logMinutes, you performed
+# analyses with a fixed-effects ANOVA, a linear mixed model (LMM), and
+# the Aligned Rank Transform (ART) procedure.[1] For Satisfaction,
+# you performed analyses with mixed ordinal logistic regression
+# (a GLMM) and the Aligned Rank Transform (ART) procedure.)
+#
+#   [1] Technically, you performed the ART procedure on Minutes, not
+#       logMinutes, but since the ART is a rank-based procedure,
+#       the difference is negligible.

@@ -1,16 +1,22 @@
 {
     "cSpell.words": [
         "Akaike's",
+        "Bonferroni",
         "crosstabs",
         "ddply",
+        "GLMM",
         "INSC",
         "Kassambara",
+        "Kolmogorov",
         "Memoire",
         "Nomial",
         "plyr",
         "Ruotong",
         "Schwarz's",
+        "Smirnov",
         "summarise",
+        "Wilcoxon",
+        "Wilk",
         "xmonte",
         "xmulti",
         "ylim"
