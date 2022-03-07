@@ -564,30 +564,6 @@ with(df, interaction.plot(Engine, Device, logMinutes))
 # Interaction plot for satisfaction
 with(df, interaction.plot(Engine, Device, as.numeric(Satisfaction)))
 
-## Looking at the overall mean and standard deviation for the whole dataset
-## we see that on average, regardless of search engine, participants
-## completed the task in 22.38 minutes with a standard deviation of
-## 15.22 minutes. However, we notice from our histogram that it seems our
-## distribution is right-skewed or log-normal distributed which makes sense
-## because it is very common for datasets that measure response times or
-## completion times to be log-normal distributed.
-
-
-## Looking at how long each subject took to complete the task
-## in minutes by each search engine, we see that Google has a much lower
-## mean and third quartile values than the other two search engines.
-## Yahoo has the next lowest mean but it appears to have a similar distribution
-## to Bing.
-##
-## The standard deviation for the time it took to complete the task using
-## Google is much lower than the standard deviation for the time it took
-## to complete the task using Yahoo or Bing - the standard
-## deviation for Google is less than half what it is for Yahoo or Bing.
-##
-## Not only is the mean less for Google but it's standard deviation is also
-## much less as well. This seems to indicate that Google may result in a
-## significant difference in the time it takes to complete the task.
-
 # Looking at the whole dataset, we see that there was a mean logMinutes of
 # 2.869 with a standard deviation of 0.722. The mean of Satisfaction was
 # 4.519 with a standard deviation of 1.657. A table of all combinations
@@ -605,6 +581,10 @@ with(df, interaction.plot(Engine, Device, as.numeric(Satisfaction)))
 # search task in less time regardless of search engine. Further,
 # on average users report being more satisfied on desktop devices than on
 # mobile devices across the search engines.
+#
+# From the interaction plots, there doesn't seem to be a interaction effect
+# for Device x Engine against logMinutes. Similarly, Device x Engine
+# interaction doesn't seem to have an effect on satisfaction.
 
 print("----------------------------------------------------------------------")
 
@@ -625,16 +605,33 @@ print("----------------------------------------------------------------------")
 # search time should not be a "prediction" at all, given your analysis
 # of experiment_01.csv.)
 
+# ENGINE
 # Completion time of the task in logMinutes will be significantly lower
 # when the user used Google vs Yahoo or Bing (logMinutes will be
 # significantly different for Google vs other levels of Engine). Yahoo
 # and Bing will not be statistically different from each other
 # in logMinutes.
 #
-# Desktop devices will be found to be statistically significantly different
-# for both logMinutes and Satisfaction (desktop devices completed the task
-# faster, lower time; desktop devices were in all cases, preferred over
-# their mobile counterpart).
+# User reported satisfaction will be statistically significantly higher
+# for Google than Yahoo or Bing. While Yahoo and Bing, will not be
+# statistically significantly different from each other.
+#
+# DEVICE
+# Completion time in logMinutes will not be statistically significantly
+# different by Device. We believe this because in the
+# logMinutes by Device boxplots the two IQRs overlap quite a bit.
+#
+# User reported satisfaction will be statistically significantly
+# higher on desktop devices than on mobile devices. While there is
+# overlap in the IQRs from the boxplot, it seems like the total range
+# (standard deviation) is lower on desktop devices.
+#
+# ENGINE x DEVICE
+# We will find no statistically significant interaction effects on
+# logMinutes for Engine x Device.
+#
+# We will find no statistically significant interaction effects on
+# Satisfaction for Engine x Device.
 
 
 
@@ -696,7 +693,12 @@ print(Anova(m, type = 3, test.statistic = "F"))
 # A linear mixed model analysis of variance indicated a statistically
 # significant effect on logMinutes from Engine (F(2, 32) = 12.04, p<.0005)
 # and Device (F(1, 16) = 17.38, p<.0005) but not from the Engine x Device
-# interaction effect (F(2, 32) = 0.238, n.s.)
+# interaction effect (F(2, 32) = 0.238, n.s.).
+#
+# None of the effects marked as statistically significant on Step 13
+# changed in this step (14). In this step (14), the main effect of Engine
+# had a lower statistically significant p-value, but this doesn't
+# change the overall reporting.
 
 print("----------------------------------------------------------------------")
 
@@ -734,13 +736,40 @@ print(summary(glht(m, emm(pairwise ~ Engine * Device))))
 # Bing mobile - Yahoo mobile == 0      0.15282    0.26132   0.585  0.99151
 # Google mobile - Yahoo mobile == 0   -0.58903    0.26132  -2.254  0.23631
 
-# TODO:
-# OR (because this naturally breaks out into three levels of engine)
-# But then why not just add the adjust param to the function???
-# print(summary(glht(m, emm(pairwise ~ Engine))))
+# Find all Engine levels with their device pairs.
+# bing desk + bing mobile
+# yahoo desk + yahoo mobile
+# google desk + google mobile
 
+print(
+    p.adjust(
+        c(
+            0.39661, # bing
+            0.06038, # google
+            0.18831 # yahoo
+        ),
+        method = "holm"
+    )
+)
+
+# After evaluating all pairwise comparisons of Engine x Device against
+# logMinutes using Z-tests, to specifically test our hypothesis that the
+# time it takes to complete the task, is lower on the desktop device than
+# the mobile device for each search engine, we then select the three
+# pairwise comparison we are interested in and correct their p-values
+# with Holm’s sequential Bonferroni procedure. We find that each individual
+# search engine does not have a statistically significant difference between
+# their desktop and mobile device counterparts in terms of completion time
+# in logMinutes.
+#
+# Specifically for the comparison of device for Google we find no
+# statistically significant effect (t(41) = 2.91, n.s.), for Yahoo
+# we find no statistically significant effect (t(41) = 2.377, n.s.),
+# and for Bing we find no statistically significant effect as well
+# (t(41) = 1.935, n.s.).
 
 print("----------------------------------------------------------------------")
+
 
 
 
@@ -787,6 +816,69 @@ print("----------------------------------------------------------------------")
 # for "ART contrasts." Do not correct for multiple comparisons, but hand-select
 # just the three hypothesized comparisons and manually correct their p-values
 # using p.adjust().)
+print("Step 17")
+
+print(
+    art.con(m, ~ Engine * Device) %>%
+        summary() %>%
+        mutate(sig. = symnum(p.value,
+            corr = FALSE, na = FALSE,
+            cutpoints = c(0, .001, .01, .05, .10, 1),
+            symbols = c("***", "**", "*", ".", " ")
+        ))
+)
+#                 contrast    estimate       SE df     t.ratio      p.value     sig.
+# Bing,desktop - Bing,mobile -10.7777778 5.781516 48 -1.86417853 4.360724e-01
+# Bing,desktop - Google,desktop  20.8888889 5.781516 32  3.61304705 1.200258e-02    *
+# Bing,desktop - Google,mobile   5.6666667 5.781516 48  0.98013510 9.220374e-01
+# Bing,desktop - Yahoo,desktop   6.0000000 5.781516 32  1.03779011 9.015093e-01
+# Bing,desktop - Yahoo,mobile  -8.1111111 5.781516 48 -1.40293848 7.250573e-01
+# Bing,mobile - Google,desktop  31.6666667 5.781516 48  5.47722558 2.228368e-05  ***
+# Bing,mobile - Google,mobile  16.4444444 5.781516 32  2.84431363 7.570102e-02    .
+# Bing,mobile - Yahoo,desktop  16.7777778 5.781516 48  2.90196864 5.869680e-02    .
+# Bing,mobile - Yahoo,mobile   2.6666667 5.781516 32  0.46124005 9.971416e-01
+# Google,desktop - Google,mobile -15.2222222 5.781516 48 -2.63291194 1.089372e-01
+# Google,desktop - Yahoo,desktop -14.8888889 5.781516 32 -2.57525694 1.330105e-01
+# Google,desktop - Yahoo,mobile -29.0000000 5.781516 48 -5.01598553 1.070946e-04  ***
+# Google,mobile - Yahoo,desktop   0.3333333 5.781516 48  0.05765501 9.999999e-01
+# Google,mobile - Yahoo,mobile -13.7777778 5.781516 32 -2.38307358 1.924290e-01
+# Yahoo,desktop - Yahoo,mobile -14.1111111 5.781516 48 -2.44072859 1.630131e-01
+
+print(
+    p.adjust(
+        c(
+            0.4360724, # bing
+            0.1089372, # google
+            0.1630131 # yahoo
+        ),
+        method = "holm"
+    )
+)
+
+# After evaluating all pairwise comparisons of Engine x Device against
+# logMinutes using the ART-C procedure, to specifically test our hypothesis
+# that the time it takes to complete the task, is lower on the desktop device
+# than the mobile device for each search engine, we then select the three
+# pairwise comparison we are interested in and correct their p-values with
+# Holm’s sequential Bonferroni procedure. We find that each individual
+# search engine does not have a statistically significant difference
+# between their desktop and mobile device counterparts in terms of completion
+# time in logMinutes.
+#
+# Specifically for the comparison of device for Google we find no
+# statistically significant effect (t(48) = 2.633, n.s.), for Yahoo
+# we find no statistically significant effect (t(41) = 2.441, n.s.),
+# and for Bing we find no statistically significant effect as well
+# (t(48) = 1.864, n.s.).
+#
+# Comparing these results against our results in step 15, we find no
+# differences. Each search engine individually does not have a
+# statistically significantly lower time for task completion on the
+# desktop device than on the mobile device. The only difference between
+# the parametric and non-parametric tests was the difference in
+# result p-values.
+
+print("----------------------------------------------------------------------")
 
 
 
@@ -803,6 +895,19 @@ print("----------------------------------------------------------------------")
 #   df2 <- as.data.frame(df) # copy the data frame to appease clmm()
 #   m = clmm(...put statistical model here..., data=df2, link="probit")
 #   Anova.clmm(m)
+print("Step 18")
+
+df2 <- as.data.frame(df)
+m <- clmm(Satisfaction ~ Engine * Device + (1 | Subject), data = df2, link = "probit")
+print(Anova.clmm(m))
+
+# An analysis of variance based on mixed ordinal logistic regression indicated
+# a statistically significant effect on Satisfaction of Engine
+# (χ2(2, N=32) = 12.044, p<.0005) and of Device (χ2(1, N=16) = 17.382, p<.001)
+# but there was no statistically significant effect detected for the
+# Engine x Device interaction (χ2(2, N=32) = 0.238, n.s.).
+
+print("----------------------------------------------------------------------")
 
 
 
@@ -820,6 +925,52 @@ print("----------------------------------------------------------------------")
 #
 #   summary(as.glht(pairs(emmeans(m, ~ Engine*Device))), test=adjusted(type="none"))
 #   # hand-select and correct hypothesized p-values for Bing, Google, and Yahoo
+print("Step 19")
+
+print(
+    summary(
+        as.glht(pairs(emmeans(m, ~ Engine * Device))),
+        test = adjusted(type = "none")
+    )
+)
+# Linear Hypotheses:
+#                                     Estimate Std. Error z value Pr(>|z|)
+# Bing desktop - Google desktop == 0   -0.3457     0.4977  -0.695 0.487251
+# Bing desktop - Yahoo desktop == 0     0.8104     0.4950   1.637 0.101590
+# Bing desktop - Bing mobile == 0       1.6360     0.5166   3.167 0.001541 **
+# Bing desktop - Google mobile == 0    -0.0141     0.4931  -0.029 0.977197
+# Bing desktop - Yahoo mobile == 0      1.7874     0.5218   3.425 0.000614 ***
+# Google desktop - Yahoo desktop == 0   1.1562     0.5071   2.280 0.022599 *
+# Google desktop - Bing mobile == 0     1.9817     0.5334   3.715 0.000203 ***
+# Google desktop - Google mobile == 0   0.3316     0.4982   0.666 0.505591
+# Google desktop - Yahoo mobile == 0    2.1331     0.5371   3.972 7.13e-05 ***
+# Yahoo desktop - Bing mobile == 0      0.8256     0.4940   1.671 0.094711 .
+# Yahoo desktop - Google mobile == 0   -0.8245     0.4953  -1.665 0.095943 .
+# Yahoo desktop - Yahoo mobile == 0     0.9770     0.5020   1.946 0.051655 .
+# Bing mobile - Google mobile == 0     -1.6501     0.5165  -3.195 0.001399 **
+# Bing mobile - Yahoo mobile == 0       0.1514     0.4909   0.308 0.757706
+# Google mobile - Yahoo mobile == 0     1.8015     0.5217   3.453 0.000554 ***
+
+print(
+    p.adjust(
+        c(
+            0.001541, # bing
+            0.505591, # google
+            0.051655 # yahoo
+        ),
+        method = "holm"
+    )
+)
+
+# Pairwise comparisons using Z-tests, corrected with Holm's sequential
+# Boneferroni procedure, indicated that users that used Bing on desktop
+# devices reported statistically significantly higher satisfaction
+# than users on mobile devices (Z = 3.167, p<.005), however users that
+# used Google or Yahoo on desktop or mobile devices did not report
+# statistically significant differences in satisfaction
+# (Google: Z = 0.666, n.s.; Yahoo: Z = 1.946, n.s.).
+
+print("----------------------------------------------------------------------")
 
 
 
@@ -829,6 +980,26 @@ print("----------------------------------------------------------------------")
 # (ART) procedure. As usual, formally report your statistical findings
 # beneath your code. Also, compare your statistical conclusions to those
 # from Step 18.
+print("Step 20")
+
+m <- art(Satisfaction ~ Engine * Device + (1 | Subject), data = df)
+print(anova(m))
+
+# A nonparametric analysis of variance based on the Aligned Rank Transform
+# indicated statistically significant effects on Satisfaction from Engine
+# (F(2, 32) = 8.598, p<.005) and on Satisfaction from Device
+# (F(1, 16) = 12.506, p<.005) but not from the Engine x Device interaction
+# effect (F(2, 32) = 2.072, n.s.).
+#
+# Comparing this to the parametric analysis of variance we conducted in
+# step 18, we see that we are drawing the same statistical difference
+# conclusions for which effects are statistically different.
+# The only difference between the non-parameteric and parametric results
+# are the fact that the tests results in different p-values with the
+# parametric tests having lower p-values than their non-parametric
+# counterparts.
+
+print("----------------------------------------------------------------------")
 
 
 
@@ -838,6 +1009,58 @@ print("----------------------------------------------------------------------")
 # contrasts (ART-C) procedure. As usual, formally report your statistical
 # findings beneath your code. Also, compare your statistical conclusions
 # to those from Step 19.
+print("Step 21")
+
+print(
+    art.con(m, ~ Engine * Device) %>%
+        summary() %>%
+        mutate(sig. = symnum(p.value,
+            corr = FALSE, na = FALSE,
+            cutpoints = c(0, .001, .01, .05, .10, 1),
+            symbols = c("***", "**", "*", ".", " ")
+        ))
+)
+#                   contrast    estimate       SE df     t.ratio     p.value sig.
+# Bing,desktop - Bing,mobile  19.7777778 5.958814 48  3.31907982 0.020197127    *
+# Bing,desktop - Google,desktop  -4.6666667 5.958814 32 -0.78315367 0.968429883
+# Bing,desktop - Google,mobile  -0.1111111 5.958814 48 -0.01864652 1.000000000
+# Bing,desktop - Yahoo,desktop  10.0000000 5.958814 32  1.67818643 0.555377719
+# Bing,desktop - Yahoo,mobile  19.3333333 5.958814 48  3.24449376 0.024655305    *
+# Bing,mobile - Google,desktop -24.4444444 5.958814 48 -4.10223348 0.002069047   **
+# Bing,mobile - Google,mobile -19.8888889 5.958814 32 -3.33772633 0.023987140    *
+# Bing,mobile - Yahoo,desktop  -9.7777778 5.958814 48 -1.64089339 0.576360915
+# Bing,mobile - Yahoo,mobile  -0.4444444 5.958814 32 -0.07458606 0.999999640
+# Google,desktop - Google,mobile   4.5555556 5.958814 48  0.76450715 0.972139401
+# Google,desktop - Yahoo,desktop  14.6666667 5.958814 32  2.46134009 0.166158255
+# Google,desktop - Yahoo,mobile  24.0000000 5.958814 48  4.02764742 0.002602696   **
+# Google,mobile - Yahoo,desktop  10.1111111 5.958814 48  1.69683294 0.540541681
+# Google,mobile - Yahoo,mobile  19.4444444 5.958814 32  3.26314027 0.028772875    *
+# Yahoo,desktop - Yahoo,mobile   9.3333333 5.958814 48  1.56630733 0.624064446
+
+print(
+    p.adjust(
+        c(
+            0.020197127, # bing
+            0.972139401, # google
+            0.624064446 # yahoo
+        ),
+        method = "holm"
+    )
+)
+
+# Post-hoc pairwise comparisons conducted with the ART-C procedure, and corrected
+# with Holm’s sequential Bonferroni procedure, indicated a trend for Bing users
+# reporting higher satisfaction on desktop devices than on mobile devices
+# (t(48) = 3.319, p=.061), however users that used Google or Yahoo on desktop
+# or mobile devices did not report statistically significant differences in
+# satisfaction (Google: t(48) = 0.765, n.s.; Yahoo: t(48) = 1.566, n.s.).
+#
+# Comparing this to the parametric tests we conducted in
+# step 19, we see that our result for Bing device satisfaction difference
+# has moved from statistically significant to a trend. However,
+# Google and Yahoo, continue to be non-significant.
+
+print("----------------------------------------------------------------------")
 
 
 
