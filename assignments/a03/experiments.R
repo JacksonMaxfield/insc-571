@@ -736,11 +736,6 @@ print(summary(glht(m, emm(pairwise ~ Engine * Device))))
 # Bing mobile - Yahoo mobile == 0      0.15282    0.26132   0.585  0.99151
 # Google mobile - Yahoo mobile == 0   -0.58903    0.26132  -2.254  0.23631
 
-# Find all Engine levels with their device pairs.
-# bing desk + bing mobile
-# yahoo desk + yahoo mobile
-# google desk + google mobile
-
 print(
     p.adjust(
         c(
@@ -756,7 +751,7 @@ print(
 # logMinutes using Z-tests, to specifically test our hypothesis that the
 # time it takes to complete the task, is lower on the desktop device than
 # the mobile device for each search engine, we then select the three
-# pairwise comparison we are interested in and correct their p-values
+# pairwise comparisons we are interested in and correct their p-values
 # with Holm’s sequential Bonferroni procedure. We find that each individual
 # search engine does not have a statistically significant difference between
 # their desktop and mobile device counterparts in terms of completion time
