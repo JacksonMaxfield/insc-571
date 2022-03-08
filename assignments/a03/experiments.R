@@ -783,13 +783,13 @@ print("----------------------------------------------------------------------")
 # of Anova().)
 print("Step 16")
 
-m <- art(logMinutes ~ Engine * Device + (1 | Subject), data = df)
+m <- art(Minutes ~ Engine * Device + (1 | Subject), data = df)
 print(anova(m))
 
 # A nonparametric analysis of variance based on the Aligned Rank Transform
-# indicated statistically significant effects on logMinutes from Engine
-# (F(2, 32) = 12.146, p<.0005) and Device (F(1, 16) = 16.444, p<.001) but
-# not from the Engine x Device interaction effect (F(2, 32) = 0.297, n.s.).
+# indicated statistically significant effects on Minutes from Engine
+# (F(2, 32) = 10.251, p<.0005) and Device (F(1, 16) = 14.484, p<.005) but
+# not from the Engine x Device interaction effect (F(2, 32) = 0.413, n.s.).
 #
 # Comparing this to the parametric analysis of variance we conducted in
 # step 14, we see that we are drawing the same statistical difference
@@ -822,7 +822,7 @@ print(
             symbols = c("***", "**", "*", ".", " ")
         ))
 )
-#                 contrast    estimate       SE df     t.ratio      p.value     sig.
+#                  contrast    estimate       SE df     t.ratio      p.value sig.
 # Bing,desktop - Bing,mobile -10.7777778 5.781516 48 -1.86417853 4.360724e-01
 # Bing,desktop - Google,desktop  20.8888889 5.781516 32  3.61304705 1.200258e-02    *
 # Bing,desktop - Google,mobile   5.6666667 5.781516 48  0.98013510 9.220374e-01
@@ -851,14 +851,14 @@ print(
 )
 
 # After evaluating all pairwise comparisons of Engine x Device against
-# logMinutes using the ART-C procedure, to specifically test our hypothesis
+# Minutes using the ART-C procedure, to specifically test our hypothesis
 # that the time it takes to complete the task, is lower on the desktop device
 # than the mobile device for each search engine, we then select the three
 # pairwise comparison we are interested in and correct their p-values with
 # Holm’s sequential Bonferroni procedure. We find that each individual
 # search engine does not have a statistically significant difference
 # between their desktop and mobile device counterparts in terms of completion
-# time in logMinutes.
+# time in Minutes.
 #
 # Specifically for the comparison of device for Google we find no
 # statistically significant effect (t(48) = 2.633, n.s.), for Yahoo
@@ -1076,3 +1076,67 @@ print("----------------------------------------------------------------------")
 #   [1] Technically, you performed the ART procedure on Minutes, not
 #       logMinutes, but since the ART is a rank-based procedure,
 #       the difference is negligible.
+
+# ENGINE
+# Our prediction for the main effect of Engine was that the task
+# completion time would be statistically significantly lower when users
+# completed the task with Google vs the other two search engines.
+# Our tests from step 13 and step 14 show that there is a
+# statistically significant difference between the levels, however
+# no post-hoc analysis was conducted to confirm our specific
+# hypothesis that Google was statistically significantly different
+# from the other two levels and that Yahoo and Bing were not
+# statistically significantly different from each other.
+# As such, we cannot entirely confirm our prediction.
+#
+# Our prediction for the main effect of Engine was that the
+# user reported satisfaction would be statistically significantly
+# higher for Google than for Yahoo or Bing. And Yahoo and Bing
+# would not have a statistically significant difference.
+# Our tests from step 18 and step 20 show that there is a statistically
+# significant difference between the levels, however post-hoc analysis
+# was conducted to confirm our specific hypothesis that Google
+# was statistically significant different from the other two levels
+# and that Yahoo and Bing were not statistically significantly different
+# from each other. As such, we cannot entirely confirm our prediction.
+#
+# DEVICE
+# Our prediction for the main effect of Device was that the task
+# completion time would not be statistically significantly different
+# between the two devices. However, the results from our tests
+# from steps 13 and 14 show that the main effect of Device is
+# significant which means that users of Desktop devices spent
+# less time completing the task than their mobile device user
+# counterparts. Our prediction was incorrect.
+#
+# Our prediction for the main effect of Device was that the
+# user reported satisfaction would be statistically significantly
+# higher from users that used desktop devices than users that used
+# mobile devices. Our results from steps 18 and 20, confirm our
+# prediction, and show that users who used desktop devices
+# reported higher satisfaction levels than users of mobile devices.
+#
+# ENGINE x DEVICE
+# We predicted that there would be no interaction effects found
+# for Engine x Device on the logMinutes response. Steps 13 and 14
+# show that there are no overall statistically significant
+# interaction effects. Further, utilizing post-hoc analyses
+# from steps 15 and 17, we found that on an individual level,
+# users of the search engine options were not statistically
+# significantly different for their pairwise device comparisons
+# (Google.desktop vs Google.mobile = n.s.,
+# Yahoo.desktop vs Yahoo.mobile = n.s.,
+# Bing.desktop vs Bing.mobile = n.s.). These findings confirm
+# our prediction.
+#
+# We predicted that there would be no interaction effects found
+# for Engine x Device on the user reported Satisfaction response.
+# Steps 18 and 20 show that there are no overall statistically
+# significant interaction effects. However, utilizing post-hoc
+# analyses from steps 19 and 21, we found that on an individual level,
+# users of the search engine options were not statistically
+# significantly different for their pairwise device comparisons
+# except in the case of Bing where we found that users of desktop
+# devices reported statistically significantly higher
+# (or trended higher) satisfaction than their mobile device
+# counterparts. This partially confirms our prediction.
