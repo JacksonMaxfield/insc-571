@@ -862,7 +862,7 @@ print(
 #
 # Specifically for the comparison of device for Google we find no
 # statistically significant effect (t(48) = 2.633, n.s.), for Yahoo
-# we find no statistically significant effect (t(41) = 2.441, n.s.),
+# we find no statistically significant effect (t(48) = 2.441, n.s.),
 # and for Bing we find no statistically significant effect as well
 # (t(48) = 1.864, n.s.).
 #
